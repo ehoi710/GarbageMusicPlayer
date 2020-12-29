@@ -1,8 +1,0 @@
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Release\GarbageMusicPlayerControlLibrary.dll
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Release\GarbageMusicPlayerControlLibrary.pdb
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.csprojAssemblyReference.cache
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.MusicTrackBar.resources
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.csproj.GenerateResource.cache
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.csproj.CoreCompileInputs.cache
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.dll
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Release\GarbageMusicPlayerControlLibrary.pdb
