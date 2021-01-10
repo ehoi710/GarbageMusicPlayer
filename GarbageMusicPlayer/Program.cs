@@ -6,9 +6,9 @@ namespace GarbageMusicPlayer
 {
     static class Program
     {
-        public static MusicPlayer musicPlayer;
-        public static MusicTree musicTree;
-        public static MusicCurrentList playList;
+        public static MusicPlayer musicPlayer = null;
+        public static MusicTree musicTree = null;
+        public static MusicCurrentList playList = null;
         public static string rootPath = @"T:\ELx'sM\SOIM\";
         public static string parameter = null;
 

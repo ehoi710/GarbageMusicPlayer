@@ -91,17 +91,15 @@ namespace GarbageMusicPlayerClassLibrary
             return _reader.CurrentTime;
         }
 
-        public string PlayToggle()
+        public void PlayToggle()
         {
             if(IsPlay())
             {
                 Pause();
-                return "Play";
             }
             else
             {
                 Play();
-                return "Pause";
             }
         }
 
@@ -118,6 +116,8 @@ namespace GarbageMusicPlayerClassLibrary
 
         public bool IsEnd()
         {
+            if (_reader == null)
+                return true;
             return (_reader.CurrentTime == _reader.TotalTime);
         }
     }

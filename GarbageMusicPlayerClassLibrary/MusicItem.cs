@@ -32,5 +32,16 @@
             this.prev = null;
             this.next = null;
         }
+
+        public MusicItem(MusicItem item)
+        {
+            this.name = item.name;
+            this.path = item.path;
+
+            file = TagLib.File.Create(this.path);
+
+            this.prev = null;
+            this.next = null;
+        }
     }
 }

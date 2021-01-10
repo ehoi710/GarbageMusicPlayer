@@ -39,6 +39,9 @@ namespace GarbageMusicPlayerClassLibrary
 
         public MusicItem GetNext()
         {
+            if (Current == null && GetHead() == null)
+                return null;
+
             Current = Current.next;
             if (Current == null)
                 Current = GetHead();

@@ -1,6 +1,7 @@
 ﻿using GarbageMusicPlayerClassLibrary;
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using MetroFramework;
@@ -9,6 +10,8 @@ namespace GarbageMusicPlayer
 {
     public partial class MainForm : MetroFramework.Forms.MetroForm
     {
+        bool isFormExtend = true;
+
         public MainForm()
         {
             InitializeComponent();
@@ -17,13 +20,22 @@ namespace GarbageMusicPlayer
 
         private void InitializeMainData()
         {
-            Program.musicTree = new MusicTree(@"SOIM", Program.rootPath); Program.musicTree.Refresh();
             Program.musicPlayer = MusicPlayer.GetInstance(MusicEndCheck);
-            Program.playList = new MusicCurrentList();
 
+            Program.musicTree = new MusicTree(@"SOIM", Program.rootPath); Program.musicTree.Refresh();
             InitializeTreeView(MusicListTreeView, Program.musicTree);
+
+            Program.playList = new MusicCurrentList();
             InitializeListView(PlayListView, Program.playList);
+
             InitializeVolumeBar(VolumeTrackBar, Program.musicPlayer);
+
+            if (Program.parameter != null)
+            {
+                string[] arr = Program.parameter.Split('\\');
+                Program.playList.Insert(new MusicItem(arr[arr.Length - 1], Program.parameter));
+                RefreshListView(PlayListView, Program.playList);
+            }
 
             KeyPreview = true;
 
@@ -33,13 +45,6 @@ namespace GarbageMusicPlayer
             TitleTextBox.Text = "TITLE";
             AlbumArtBox.Parent = Background;
             ResetAlbumArt();
-
-            if (Program.parameter != null)
-            {
-                string[] arr = Program.parameter.Split('\\');
-                Program.playList.Insert(new MusicItem(arr[arr.Length - 1], Program.parameter));
-                RefreshListView(PlayListView, Program.playList);
-            }
         }
 
         private void MusicListTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -61,7 +66,8 @@ namespace GarbageMusicPlayer
             }
             else
             {
-                Program.playList.Insert((MusicItem)e.Node.Tag);
+                MusicItem tmp = new MusicItem((MusicItem)e.Node.Tag);
+                Program.playList.Insert(tmp);
                 RefreshListView(PlayListView, Program.playList);
             }
             MusicListTreeView.SelectedNode = null;
@@ -95,6 +101,9 @@ namespace GarbageMusicPlayer
 
         public void RefreshTreeView(TreeView treeView, TreeNode treeNode, MusicTree musicTree)
         {
+            if (musicTree == null)
+                return;
+
             treeView.BeginUpdate();
 
             treeNode.Nodes.Clear();
@@ -107,14 +116,17 @@ namespace GarbageMusicPlayer
         {
             treeView.BeginUpdate();
 
-            TreeNode tmp = new TreeNode
+            if(musicTree != null)
             {
-                Name = "dir",
-                Text = musicTree.dirName,
-                Tag = musicTree.path
-            };
+                TreeNode tmp = new TreeNode
+                {
+                    Name = "dir",
+                    Text = musicTree.dirName,
+                    Tag = musicTree.path
+                };
 
-            treeView.Nodes.Add(tmp);
+                treeView.Nodes.Add(tmp);
+            }
             treeView.EndUpdate();
 
             RefreshTreeView(treeView, treeView.Nodes[0], musicTree);
@@ -164,59 +176,16 @@ namespace GarbageMusicPlayer
             musicPlayer.SetVolume(trackBar.Value / 100.0f);
         }
 
-        private Bitmap Blur(Bitmap image)
-        {
-            Bitmap blurred = new Bitmap(image);
-            for(int y = 1; y < image.Height - 2; y++)
-            {
-                int avgR = 0;
-                int avgG = 0;
-                int avgB = 0;
-                
-                for (int yy = -1; yy < 2; yy++)
-                {
-                    for (int xx = -1; xx < 2; xx++)
-                    {
-                        Color c = image.GetPixel(1 + xx, y + yy);
-                        avgR += c.R;
-                        avgG += c.G;
-                        avgB += c.B;
-                    }
-                }
-
-                for (int x = 1; x < image.Width - 2; x++)
-                {
-                    if(x != 1)
-                    {
-                        for(int yy = -1; yy < 2; yy++)
-                        {
-                            Color c = image.GetPixel(x - 2, y + yy);
-                            avgR -= c.R;
-                            avgG -= c.G;
-                            avgB -= c.B;
-
-                            Color a = image.GetPixel(x + 1, y + yy);
-                            avgR += a.R;
-                            avgG += a.G;
-                            avgB += a.B;
-                        }
-                    }
-                    blurred.SetPixel(x, y, Color.FromArgb(avgR / 9, avgG / 9, avgB / 9));
-                }
-            }
-            return blurred;
-        }
-
         public Bitmap ResizeBitmap(Bitmap bitmap, int width, int height, bool invers = false)
         {
             Size size;
             if(!invers && ((bitmap.Width * height > bitmap.Height * width)) || (invers && (bitmap.Width * height < bitmap.Height * width)))
             {
-                size = new Size(width, (int)(height * ((float)bitmap.Height / bitmap.Width)));
+                size = new Size(width, (int)(bitmap.Height * ((float)width / bitmap.Width)));
             }
             else if(!invers && ((bitmap.Width * height < bitmap.Height * width)) || (invers && (bitmap.Width * height > bitmap.Height * width)))
             {
-                size = new Size((int)(width * ((float)bitmap.Width / bitmap.Height)), height);
+                size = new Size((int)(bitmap.Width * ((float)height / bitmap.Height)), height);
             }
             else
             {
@@ -227,12 +196,121 @@ namespace GarbageMusicPlayer
 
         public Bitmap CropBitmap(Bitmap bitmap, int width, int height)
         {
-            Bitmap CroppedBitmap = new Bitmap(bitmap);
-            CroppedBitmap = CroppedBitmap.Clone(
-                new Rectangle((bitmap.Width - width) / 2, (bitmap.Height - height), width, height),
-                System.Drawing.Imaging.PixelFormat.DontCare
-            );
-            return CroppedBitmap;
+            Rectangle cropArea = new Rectangle((bitmap.Width - width) / 2, (bitmap.Height - height) / 2, width, height);
+            Bitmap CroppedBitmap = new Bitmap(width, height);
+
+            using(Graphics g = Graphics.FromImage(CroppedBitmap))
+            {
+                g.DrawImage(bitmap, -cropArea.X, -cropArea.Y);
+                return CroppedBitmap;
+            }
+        }
+        private int Max(int a, int b)
+        {
+            if (a > b)
+                return a;
+            else
+                return b;
+        }
+
+        private int Min(int a, int b)
+        {
+            if (a < b)
+                return a;
+            else
+                return b;
+        }
+
+        private Bitmap BoxBlurH(Bitmap image)
+        {
+            Bitmap blurred = new Bitmap(image);
+            int r = 2;
+            int w = (r + r + 1);
+
+            for (int y = 0; y < blurred.Height; y++)
+            {
+                int R = 0;
+                int G = 0;
+                int B = 0;
+
+                for (int xx = -r; xx <= r; xx++)
+                {
+                    int ix = Min(blurred.Width - 1, Max(0, xx));
+                    Color pix = image.GetPixel(ix, y);
+
+                    R += pix.R;
+                    G += pix.G;
+                    B += pix.B;
+                }
+
+                for (int x = 1; x < blurred.Width; x++)
+                {
+                    int minx = Min(blurred.Width - 1, Max(0, x - r - 1));
+                    int maxx = Min(blurred.Width - 1, Max(0, x + r));
+
+                    Color d = image.GetPixel(minx, y);
+                    Color a = image.GetPixel(maxx, y);
+
+                    R = R - d.R + a.R;
+                    G = G - d.G + a.G;
+                    B = B - d.B + a.B;
+
+                    blurred.SetPixel(x, y, Color.FromArgb(R / w, G / w, B / w));
+                }
+            }
+
+            return blurred;
+        }
+
+        private Bitmap BoxBlurT(Bitmap image)
+        {
+            Bitmap blurred = new Bitmap(image);
+            int r = 2;
+            int w = (r + r + 1);
+
+            for (int x = 0; x < blurred.Width; x++)
+            {
+                int R = 0;
+                int G = 0;
+                int B = 0;
+
+                for (int yy = -r; yy <= r; yy++)
+                {
+                    int iy = Min(blurred.Width - 1, Max(0, yy));
+                    Color pix = image.GetPixel(x, iy);
+
+                    R += pix.R;
+                    G += pix.G;
+                    B += pix.B;
+                }
+
+                for (int y = 1; y < blurred.Height; y++)
+                {
+                    int miny = Min(blurred.Height - 1, Max(0, y - r - 1));
+                    int maxy = Min(blurred.Height - 1, Max(0, y + r));
+
+                    Color d = image.GetPixel(x, miny);
+                    Color a = image.GetPixel(x, maxy);
+
+                    R = R - d.R + a.R;
+                    G = G - d.G + a.G;
+                    B = B - d.B + a.B;
+
+                    blurred.SetPixel(x, y, Color.FromArgb(R / w, G / w, B / w));
+                }
+            }
+
+            return blurred;
+        }
+
+        public Bitmap Blur(Bitmap image)
+        {
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            Bitmap blurred = BoxBlurT(BoxBlurH(image));
+            //sw.Stop();
+            //MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
+            return blurred;
         }
 
         public void DrawAlbumArt(TagLib.IPicture pictures)
@@ -247,9 +325,16 @@ namespace GarbageMusicPlayer
         {
             musicTrackBar.Value = 0;
             MusicPlayTimeCheckTimer.Stop();
-
             PlayButton.Text = "Play";
+
             Program.musicPlayer.SetReader(musicItem);
+
+            if (musicItem == null)
+            {
+                TitleTextBox.Text = "Music not Selected";
+                ResetAlbumArt();
+                return;
+            }
 
             if (musicItem.file.Tag.Title != null)
                 TitleTextBox.Text = musicItem.file.Tag.Title;
@@ -272,18 +357,29 @@ namespace GarbageMusicPlayer
         {
             if (Program.musicPlayer.IsNull())
             {
-                ChangeSelectedItem(Program.playList.Current);
+                if (Program.playList.Current == null)
+                {
+                    MessageBox.Show("Music Not Selected");
+                    return;
+                }
+                else
+                {
+                    ChangeSelectedItem(Program.playList.Current);
+                }
             }
-            if (Program.musicPlayer.IsNull())
+
+            if(Program.musicPlayer.IsPlay())
             {
-                MessageBox.Show("Music Not Selected");
-                return;
-            }
-            PlayButton.Text = Program.musicPlayer.PlayToggle();
-            if (MusicPlayTimeCheckTimer.Enabled)
+                Program.musicPlayer.Pause();
+                PlayButton.Text = "Play";
                 MusicPlayTimeCheckTimer.Stop();
+            }
             else
+            {
+                Program.musicPlayer.Play();
+                PlayButton.Text = "Pause";
                 MusicPlayTimeCheckTimer.Start();
+            }
         }
 
         private void GetNextMusic()
@@ -311,7 +407,8 @@ namespace GarbageMusicPlayer
 
         private void FomeClosing(object sender, FormClosingEventArgs e)
         {
-            Program.musicPlayer.Stop();
+            if (Program.musicPlayer != null)
+                Program.musicPlayer.Stop();
         }
 
         private void PlayListMouseDown(object sender, MouseEventArgs e)
@@ -370,6 +467,14 @@ namespace GarbageMusicPlayer
 
                 case Keys.D:
                     GetNextMusic();
+                    break;
+
+                case Keys.E:
+                    if (isFormExtend)
+                        this.Width = Background.Width;
+                    else
+                        this.Width = 1076;
+                    isFormExtend = !isFormExtend;
                     break;
             }
         }

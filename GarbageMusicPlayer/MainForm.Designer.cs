@@ -49,7 +49,7 @@
             this.TitleTextBox.BackColor = System.Drawing.Color.Transparent;
             this.TitleTextBox.Font = new System.Drawing.Font("Mplus 1p Light", 15F);
             this.TitleTextBox.ForeColor = System.Drawing.Color.White;
-            this.TitleTextBox.Location = new System.Drawing.Point(45, 583);
+            this.TitleTextBox.Location = new System.Drawing.Point(45, 593);
             this.TitleTextBox.Name = "TitleTextBox";
             this.TitleTextBox.Size = new System.Drawing.Size(360, 30);
             this.TitleTextBox.TabIndex = 0;
@@ -67,7 +67,7 @@
             // PlayButton
             // 
             this.PlayButton.Font = new System.Drawing.Font("Mplus 1p Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PlayButton.Location = new System.Drawing.Point(170, 664);
+            this.PlayButton.Location = new System.Drawing.Point(170, 674);
             this.PlayButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(120, 50);
@@ -80,7 +80,7 @@
             // 
             this.AlbumArtBox.BackColor = System.Drawing.Color.Transparent;
             this.AlbumArtBox.Image = global::GarbageMusicPlayer.Properties.Resources.noAlbumImage;
-            this.AlbumArtBox.Location = new System.Drawing.Point(45, 162);
+            this.AlbumArtBox.Location = new System.Drawing.Point(45, 172);
             this.AlbumArtBox.Margin = new System.Windows.Forms.Padding(6);
             this.AlbumArtBox.Name = "AlbumArtBox";
             this.AlbumArtBox.Size = new System.Drawing.Size(360, 360);
@@ -109,7 +109,7 @@
             // Background
             // 
             this.Background.Image = global::GarbageMusicPlayer.Properties.Resources.DefaultBackground;
-            this.Background.Location = new System.Drawing.Point(0, 0);
+            this.Background.Location = new System.Drawing.Point(0, 10);
             this.Background.Name = "Background";
             this.Background.Size = new System.Drawing.Size(450, 810);
             this.Background.TabIndex = 6;
@@ -122,7 +122,7 @@
             // musicTrackBar
             // 
             this.musicTrackBar.BackColor = System.Drawing.Color.Transparent;
-            this.musicTrackBar.Location = new System.Drawing.Point(45, 531);
+            this.musicTrackBar.Location = new System.Drawing.Point(45, 541);
             this.musicTrackBar.Name = "musicTrackBar";
             this.musicTrackBar.Size = new System.Drawing.Size(360, 30);
             this.musicTrackBar.TabIndex = 7;
@@ -133,7 +133,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 810);
+            this.ClientSize = new System.Drawing.Size(1230, 820);
             this.Controls.Add(this.musicTrackBar);
             this.Controls.Add(this.VolumeTrackBar);
             this.Controls.Add(this.PlayListView);
