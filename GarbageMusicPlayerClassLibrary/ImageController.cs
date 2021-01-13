@@ -111,7 +111,7 @@ namespace GarbageMusicPlayerClassLibrary
             float HeightRatio = (float)height / bitmap.Height;
             float WidthRatio = (float)width / bitmap.Width;
 
-            float amount = 0.0f;
+            float amount;
             if (
                 ((mode == ImageResizeMode.Smaller) && (WidthRatio > HeightRatio)) || 
                 ((mode == ImageResizeMode.Bigger) && (WidthRatio < HeightRatio))
@@ -136,6 +136,18 @@ namespace GarbageMusicPlayerClassLibrary
         public static Bitmap CropBitmap(Bitmap bitmap, int width, int height)
         {
             Rectangle cropArea = new Rectangle((bitmap.Width - width) / 2, (bitmap.Height - height) / 2, width, height);
+            Bitmap CroppedBitmap = new Bitmap(width, height);
+
+            using (Graphics g = Graphics.FromImage(CroppedBitmap))
+            {
+                g.DrawImage(bitmap, -cropArea.X, -cropArea.Y);
+                return CroppedBitmap;
+            }
+        }
+
+        public static Bitmap CropBitmap(Bitmap bitmap, int x, int y, int width, int height)
+        {
+            Rectangle cropArea = new Rectangle(x, y, width, height);
             Bitmap CroppedBitmap = new Bitmap(width, height);
 
             using (Graphics g = Graphics.FromImage(CroppedBitmap))

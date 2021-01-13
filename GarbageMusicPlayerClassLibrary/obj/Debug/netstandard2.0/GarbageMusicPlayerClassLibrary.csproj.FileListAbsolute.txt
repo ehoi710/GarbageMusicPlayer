@@ -5,7 +5,6 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.pdb
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.pdb
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.csprojAssemblyReference.cache
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Windows.Forms.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Security.dll
@@ -15,3 +14,4 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Runtime.Serialization.Formatters.Soap.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CopyComplete
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Drawing.VisualStudio.15.0.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache

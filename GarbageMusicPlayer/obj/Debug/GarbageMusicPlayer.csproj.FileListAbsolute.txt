@@ -14,8 +14,9 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\NAudi
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\NAudio.xml
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\taglib-sharp.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Debug\GarbageMusicPlayer.MainForm.resources
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.dll
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Fonts.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\GarbageMusicPlayerControlLibrary.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\GarbageMusicPlayerControlLibrary.pdb
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\System.Drawing.Common.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Design.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Fonts.dll

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.TitleTextBox = new System.Windows.Forms.Label();
+            this.TitleTextBox1 = new System.Windows.Forms.Label();
             this.MusicListTreeView = new System.Windows.Forms.TreeView();
             this.PlayButton = new System.Windows.Forms.Button();
             this.AlbumArtBox = new System.Windows.Forms.PictureBox();
@@ -45,17 +45,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.Background)).BeginInit();
             this.SuspendLayout();
             // 
-            // TitleTextBox
+            // TitleTextBox1
             // 
-            this.TitleTextBox.BackColor = System.Drawing.Color.Transparent;
-            this.TitleTextBox.Font = new System.Drawing.Font("Mplus 1p Light", 15F);
-            this.TitleTextBox.ForeColor = System.Drawing.Color.White;
-            this.TitleTextBox.Location = new System.Drawing.Point(45, 620);
-            this.TitleTextBox.Name = "TitleTextBox";
-            this.TitleTextBox.Size = new System.Drawing.Size(360, 30);
-            this.TitleTextBox.TabIndex = 0;
-            this.TitleTextBox.Text = "label1";
-            this.TitleTextBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TitleTextBox1.BackColor = System.Drawing.Color.Transparent;
+            this.TitleTextBox1.Font = new System.Drawing.Font("Mplus 1p Light", 15F);
+            this.TitleTextBox1.ForeColor = System.Drawing.Color.White;
+            this.TitleTextBox1.Location = new System.Drawing.Point(45, 599);
+            this.TitleTextBox1.Name = "TitleTextBox1";
+            this.TitleTextBox1.Size = new System.Drawing.Size(360, 30);
+            this.TitleTextBox1.TabIndex = 0;
+            this.TitleTextBox1.Text = "label1";
+            this.TitleTextBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MusicListTreeView
             // 
@@ -81,7 +81,7 @@
             // 
             this.AlbumArtBox.BackColor = System.Drawing.Color.Transparent;
             this.AlbumArtBox.Image = global::GarbageMusicPlayer.Properties.Resources.noAlbumImage;
-            this.AlbumArtBox.Location = new System.Drawing.Point(61, 181);
+            this.AlbumArtBox.Location = new System.Drawing.Point(45, 181);
             this.AlbumArtBox.Margin = new System.Windows.Forms.Padding(6);
             this.AlbumArtBox.Name = "AlbumArtBox";
             this.AlbumArtBox.Size = new System.Drawing.Size(360, 360);
@@ -125,7 +125,7 @@
             // musicTrackBar
             // 
             this.musicTrackBar.BackColor = System.Drawing.Color.Transparent;
-            this.musicTrackBar.Location = new System.Drawing.Point(48, 571);
+            this.musicTrackBar.Location = new System.Drawing.Point(45, 550);
             this.musicTrackBar.Name = "musicTrackBar";
             this.musicTrackBar.Size = new System.Drawing.Size(360, 30);
             this.musicTrackBar.TabIndex = 7;
@@ -135,7 +135,7 @@
             // MusicComment
             // 
             this.MusicComment.BackColor = System.Drawing.Color.Transparent;
-            this.MusicComment.Font = new System.Drawing.Font("나눔고딕코딩", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.MusicComment.Font = new System.Drawing.Font("나눔고딕코딩", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MusicComment.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.MusicComment.Location = new System.Drawing.Point(45, 75);
             this.MusicComment.Name = "MusicComment";
@@ -153,7 +153,7 @@
             this.Controls.Add(this.PlayListView);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.MusicListTreeView);
-            this.Controls.Add(this.TitleTextBox);
+            this.Controls.Add(this.TitleTextBox1);
             this.Controls.Add(this.AlbumArtBox);
             this.Controls.Add(this.musicTrackBar);
             this.Controls.Add(this.Background);
@@ -172,7 +172,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label TitleTextBox;
+        private System.Windows.Forms.Label TitleTextBox1;
         private System.Windows.Forms.TreeView MusicListTreeView;
         private System.Windows.Forms.Button PlayButton;
         private System.Windows.Forms.PictureBox AlbumArtBox;

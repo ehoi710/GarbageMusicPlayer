@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace GarbageMusicPlayer
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MetroFramework.Forms.MetroForm
     {
         public struct ComponentDefaultSize
         {
@@ -24,15 +24,19 @@ namespace GarbageMusicPlayer
 
         bool loadCompleted = false;
 
+        MetroFramework.Drawing.Html.HtmlLabel TitleLabel;
+
         Bitmap DefaultBackgroundImage;
         Bitmap DefaultAlbumImage;
 
         Size MainFormDefaultSize;
         List<ComponentDefaultSize> ComponentList;
-        
+
         public MainForm()
         {
             InitializeComponent();
+
+            TitleLabel = new MetroFramework.Drawing.Html.HtmlLabel();
 
             InitializeComponentSize();
             InitializeMusicPlayer();
@@ -53,16 +57,25 @@ namespace GarbageMusicPlayer
                 RefreshListView(PlayListView, Program.playList);
             }
 
+            
+
             KeyPreview = true;
+
+            ResetAlbumArt();
 
             MusicPlayTimeCheckTimer.Stop();
             musicTrackBar.Parent = Background;
-            TitleTextBox.Parent = Background;
-            TitleTextBox.Text = "TITLE";
+            TitleTextBox1.Parent = Background;
+            TitleTextBox1.Text = "TITLE";
+            TitleLabel.Parent = Background;
+            TitleLabel.BackgroundImage = ImageController.CropBitmap(
+                new Bitmap(Background.Image), 
+                TitleLabel.Location.X, TitleLabel.Location.Y, 
+                TitleLabel.Width, TitleLabel.Height
+            );
+            TitleLabel.Text = "<!doctype html><html><head><style>#d1 {text-align:center;} </style></head><body><div id = \"d1\">TITLE</div></body></html>";
             AlbumArtBox.Parent = Background;
             MusicComment.Parent = Background;
-
-            ResetAlbumArt();
 
             loadCompleted = true;
         }
@@ -80,8 +93,11 @@ namespace GarbageMusicPlayer
             musicTrackBar.Location = new Point(45, 545);
             musicTrackBar.Size = new Size(360, 30);
 
-            TitleTextBox.Location = new Point(45, 600);
-            TitleTextBox.Size = new Size(360, 35);
+            TitleTextBox1.Location = new Point(45, 600);
+            TitleTextBox1.Size = new Size(360, 35);
+
+            TitleLabel.Location = new Point(45, 635);
+            TitleLabel.Size = new Size(360, 35);
 
             PlayButton.Location = new Point(170, 675);
             PlayButton.Size = new Size(120, 50);
@@ -253,7 +269,8 @@ namespace GarbageMusicPlayer
                 info.BlurredImage = ImageController.BoxBlur(bitmap, 2);
             }
             
-            Background.Image = info.BlurredImage;
+            Background.Image = info.BlurredImage; 
+            TitleLabel.BackgroundImage = ImageController.CropBitmap(new Bitmap(Background.Image), TitleLabel.Location.X, TitleLabel.Location.Y, TitleLabel.Width, TitleLabel.Height);
         }
 
         public void ChangeSelectedItem(MusicInfo musicItem)
@@ -266,12 +283,12 @@ namespace GarbageMusicPlayer
 
             if (musicItem == null)
             {
-                TitleTextBox.Text = "Music not Selected";
+                TitleTextBox1.Text = "Music not Selected";
                 ResetAlbumArt();
                 return;
             }
 
-            TitleTextBox.Text = musicItem.title;
+            TitleTextBox1.Text = musicItem.title;
 
             MusicComment.Text = musicItem.comment;
 
@@ -292,6 +309,7 @@ namespace GarbageMusicPlayer
 
             Background.Image = DefaultBackgroundImage;
             AlbumArtBox.Image = DefaultAlbumImage;
+            TitleLabel.BackgroundImage = ImageController.CropBitmap(new Bitmap(Background.Image), TitleLabel.Location.X, TitleLabel.Location.Y, TitleLabel.Width, TitleLabel.Height);
         }
 
         private void MusicPauseStart()
