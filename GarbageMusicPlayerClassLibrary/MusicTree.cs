@@ -10,7 +10,7 @@ namespace GarbageMusicPlayerClassLibrary
     public class MusicTree
     {
         readonly List<MusicTree> subList;
-        readonly List<MusicItem> musicList;
+        readonly List<MusicInfo> musicList;
 
         public string path;
         public string dirName;
@@ -20,14 +20,14 @@ namespace GarbageMusicPlayerClassLibrary
         public MusicTree(string name, string path)
         {
             this.subList = new List<MusicTree>();
-            this.musicList = new List<MusicItem>();
+            this.musicList = new List<MusicInfo>();
             this.dirName = name;
             this.path = path;
 
             this.isLoaded = false;
         }
 
-        public virtual MusicItem Insert(MusicItem item)
+        public virtual MusicInfo Insert(MusicInfo item)
         {
             musicList.Add(item);
 
@@ -81,10 +81,10 @@ namespace GarbageMusicPlayerClassLibrary
             return subList;
         }
 
-        public MusicItem GetMusicItem(int i)
+        public MusicInfo GetMusicItem(int i)
         {
             int idx = 0;
-            foreach(MusicItem item in musicList)
+            foreach(MusicInfo item in musicList)
             {
                 if (idx == i) return item;
                 idx++;
@@ -92,7 +92,7 @@ namespace GarbageMusicPlayerClassLibrary
             return null;
         }
 
-        public List<MusicItem> GetMusicList()
+        public List<MusicInfo> GetMusicList()
         {
             return musicList;
         }
@@ -120,7 +120,7 @@ namespace GarbageMusicPlayerClassLibrary
             foreach (FileInfo file in files)
             {
                 if (Path.GetExtension(file.FullName).Equals(".mp3"))
-                    Insert(new MusicItem(file.Name, file.FullName));
+                    Insert(new MusicInfo(file.Name, file.FullName));
                 if (depth == 1) break;
             }
 

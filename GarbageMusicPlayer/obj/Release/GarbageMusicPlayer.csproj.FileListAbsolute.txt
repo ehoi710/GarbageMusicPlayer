@@ -18,3 +18,4 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\Gar
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.csproj.CopyComplete
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.exe
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Release\System.Drawing.Common.dll

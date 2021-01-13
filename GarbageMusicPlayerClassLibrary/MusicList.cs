@@ -1,124 +1,58 @@
-﻿namespace GarbageMusicPlayerClassLibrary
-{
-    public class MusicList
-    {
-        private MusicItem head;
-        private MusicItem tail;
+﻿using System.Collections.Generic;
 
-        private int MusicCount;
+namespace GarbageMusicPlayerClassLibrary
+{
+    public class MusicList : List<MusicInfo>
+    {
+        public int Current { get; private set; }
 
         public MusicList()
         {
-            head = null;
-            tail = null;
-
-            MusicCount = 0;
+            Current = -1;
         }
 
-        public MusicItem GetItem(int index)
+        public new void Add(MusicInfo item)
         {
-            MusicItem tmp = head;
-            for (int i = 0; i < index; i++)
-            {
-                if (tmp == null)
-                    return null;
-                tmp = tmp.next;
-            }
-            return tmp;
+            base.Add(item);
         }
 
-        public MusicItem this[int i]
+        public new void RemoveAt(int index)
         {
-            get { return GetItem(i); }
+            base.RemoveAt(index);
         }
 
-        public MusicItem GetHead()
+        public new void Clear()
         {
-            return head;
+            Current = -1;
+            base.Clear();
         }
 
-        public MusicItem GetTail()
+        public MusicInfo GetCurrent()
         {
-            return tail;
-        }
-
-        public int GetCount()
-        {
-            return MusicCount;
-        }
-
-        public MusicItem Find(int idx)
-        {
-            if (idx >= MusicCount)
+            if (base.Count <= 0)
+                Current = -1;
+            if (Current < 0)
                 return null;
-            else
-            {
-                int i = 0;
-                MusicItem tmp;
-                for (tmp = head; i < idx; i++)
-                {
-                    tmp = tmp.next;
-                }
-                return tmp;
-            }
+            return base[Current];
         }
 
-        public virtual void Insert(MusicItem item)
+        public MusicInfo GetPrev()
         {
-            if (head == null)
-            {
-                item.prev = null;
-                item.next = null;
-
-                head = item;
-                tail = item;
-            }
+            if (Current <= 0)
+                Current = base.Count - 1;
             else
-            {
-                tail.next = item;
-
-                item.prev = tail;
-                item.next = null;
-
-                tail = item;
-            }
-
-            MusicCount++;
+                Current--;
+            return GetCurrent();
         }
 
-        public virtual void Delete(int idx)
+        public MusicInfo GetNext()
         {
-            MusicItem deleteItem = Find(idx);
-            if (deleteItem == null)
-                return;
-            if (MusicCount == 1)
-            {
-                head = tail = null;
-            }
-            else if (idx == 0)
-            {
-                deleteItem.next.prev = null;
-                head = head.next;
-            }
-            else if (idx == MusicCount - 1)
-            {
-                deleteItem.prev.next = null;
-                tail = tail.prev;
-            }
+            if (Current >= base.Count - 1)
+                Current = 0;
             else
-            {
-                deleteItem.next.prev = deleteItem.prev;
-                deleteItem.prev.next = deleteItem.next;
-            }
-            MusicCount--;
-        }
+                Current++;
 
-        public void Clear()
-        {
-            while(MusicCount != 0)
-            {
-                Delete(0);
-            }
+            return GetCurrent();
         }
     }
 }

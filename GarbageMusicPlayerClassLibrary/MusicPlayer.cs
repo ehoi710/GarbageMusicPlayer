@@ -39,7 +39,7 @@ namespace GarbageMusicPlayerClassLibrary
             _totalTime = _reader.TotalTime;
         }
 
-        public void SetReader(MusicItem music)
+        public void SetReader(MusicInfo music)
         {
             if(music == null)
             {

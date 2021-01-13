@@ -14,3 +14,4 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Deployment.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Runtime.Serialization.Formatters.Soap.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Debug\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CopyComplete
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Debug\netstandard2.0\System.Drawing.VisualStudio.15.0.dll

@@ -10,7 +10,8 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.csprojAssemblyReference.cache
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.AssemblyInfoInputs.cache
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.AssemblyInfo.cs
-C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CopyComplete
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Drawing.VisualStudio.15.0.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache

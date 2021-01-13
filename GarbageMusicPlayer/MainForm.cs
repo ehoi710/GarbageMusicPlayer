@@ -1,31 +1,47 @@
 ﻿using GarbageMusicPlayerClassLibrary;
 using System;
 using System.Drawing;
-using System.Diagnostics;
-using System.IO;
 using System.Windows.Forms;
-using MetroFramework;
+using System.Collections.Generic;
 
 namespace GarbageMusicPlayer
 {
-    public partial class MainForm : MetroFramework.Forms.MetroForm
+    public partial class MainForm : Form
     {
-        bool isFormExtend = true;
+        public struct ComponentDefaultSize
+        {
+            public Control control;
+            public Size size;
+            public Point location;
 
+            public ComponentDefaultSize(Control _control, Size _size, Point _location)
+            {
+                control = _control;
+                size = new Size(_size.Width, _size.Height);
+                location = new Point(_location.X, _location.Y);
+            }
+        }
+
+        bool loadCompleted = false;
+
+        Bitmap DefaultBackgroundImage;
+        Bitmap DefaultAlbumImage;
+
+        Size MainFormDefaultSize;
+        List<ComponentDefaultSize> ComponentList;
+        
         public MainForm()
         {
             InitializeComponent();
-            InitializeMainData();
-        }
 
-        private void InitializeMainData()
-        {
-            Program.musicPlayer = MusicPlayer.GetInstance(MusicEndCheck);
+            InitializeComponentSize();
+            InitializeMusicPlayer();
 
-            Program.musicTree = new MusicTree(@"SOIM", Program.rootPath); Program.musicTree.Refresh();
+            Program.musicTree = new MusicTree(@"SOIM", Program.rootPath);
+            Program.musicTree.Refresh();
             InitializeTreeView(MusicListTreeView, Program.musicTree);
 
-            Program.playList = new MusicCurrentList();
+            Program.playList = new MusicList();
             InitializeListView(PlayListView, Program.playList);
 
             InitializeVolumeBar(VolumeTrackBar, Program.musicPlayer);
@@ -33,7 +49,7 @@ namespace GarbageMusicPlayer
             if (Program.parameter != null)
             {
                 string[] arr = Program.parameter.Split('\\');
-                Program.playList.Insert(new MusicItem(arr[arr.Length - 1], Program.parameter));
+                Program.playList.Add(new MusicInfo(arr[arr.Length - 1], Program.parameter));
                 RefreshListView(PlayListView, Program.playList);
             }
 
@@ -44,7 +60,132 @@ namespace GarbageMusicPlayer
             TitleTextBox.Parent = Background;
             TitleTextBox.Text = "TITLE";
             AlbumArtBox.Parent = Background;
+            MusicComment.Parent = Background;
+
             ResetAlbumArt();
+
+            loadCompleted = true;
+        }
+
+        private void InitializeComponentSize()
+        {
+            this.Size = new Size(1200, 820);
+
+            Background.Location = new Point(0, 10);
+            Background.Size = new Size(450, 810);
+
+            AlbumArtBox.Location = new Point(45, 175);
+            AlbumArtBox.Size = new Size(360, 360);
+
+            musicTrackBar.Location = new Point(45, 545);
+            musicTrackBar.Size = new Size(360, 30);
+
+            TitleTextBox.Location = new Point(45, 600);
+            TitleTextBox.Size = new Size(360, 35);
+
+            PlayButton.Location = new Point(170, 675);
+            PlayButton.Size = new Size(120, 50);
+
+            VolumeTrackBar.Location = new Point(465, 30);
+            VolumeTrackBar.Size = new Size(180, 55);
+
+            MusicListTreeView.Location = new Point(465, 300);
+            MusicListTreeView.Size = new Size(360, 480);
+
+            PlayListView.Location = new Point(830, 300);
+            PlayListView.Size = new Size(360, 480);
+
+            MusicComment.Location = new Point(45, 75);
+            MusicComment.Size = new Size(360, 100);
+
+            MainFormDefaultSize = new Size(this.Width, this.Height);
+            ComponentList = new List<ComponentDefaultSize>();
+            foreach (Control c in this.Controls)
+            {
+                ComponentList.Add(new ComponentDefaultSize(c, c.Size, c.Location));
+            }
+        }
+
+        private void InitializeMusicPlayer()
+        {
+            Program.musicPlayer = MusicPlayer.GetInstance(MusicEndCheck);
+        }
+
+        public void InitializeTreeView(TreeView treeView, MusicTree musicTree)
+        {
+            treeView.BeginUpdate();
+
+            if (musicTree != null)
+            {
+                TreeNode tmp = new TreeNode
+                {
+                    Name = "dir",
+                    Text = musicTree.dirName,
+                    Tag = musicTree.path
+                };
+
+                treeView.Nodes.Add(tmp);
+            }
+            treeView.EndUpdate();
+
+            RefreshTreeView(treeView, treeView.Nodes[0], musicTree);
+        }
+
+        public void RefreshTreeView(TreeView treeView, TreeNode treeNode, MusicTree musicTree)
+        {
+            if (musicTree == null)
+                return;
+
+            treeView.BeginUpdate();
+
+            treeNode.Nodes.Clear();
+            AddTreeViewToMusicList(treeNode, musicTree);
+
+            treeView.EndUpdate();
+        }
+
+        public void InitializeListView(ListView listView, MusicList playList)
+        {
+            listView.BeginUpdate();
+
+            listView.View = View.Details;
+
+            listView.GridLines = true;
+            listView.FullRowSelect = true;
+            listView.CheckBoxes = false;
+
+            listView.Columns.Add("Name", 360);
+
+            listView.EndUpdate();
+
+            RefreshListView(listView, playList);
+        }
+
+        public void RefreshListView(ListView listView, MusicList playList)
+        {
+            listView.BeginUpdate();
+            listView.Items.Clear();
+            int idx = 0;
+            foreach (MusicInfo item in playList)
+            {
+                ListViewItem tmp = new ListViewItem
+                {
+                    Text = item.title,
+                    Tag = idx
+                };
+
+                listView.Items.Add(tmp);
+                idx++;
+            }
+            listView.EndUpdate();
+        }
+
+        public void InitializeVolumeBar(TrackBar trackBar, MusicPlayer musicPlayer)
+        {
+            trackBar.Minimum = 0;
+            trackBar.Maximum = 100;
+            trackBar.Value = 50;
+            musicPlayer.SetVolume(trackBar.Value / 100.0f);
         }
 
         private void MusicListTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -66,8 +207,8 @@ namespace GarbageMusicPlayer
             }
             else
             {
-                MusicItem tmp = new MusicItem((MusicItem)e.Node.Tag);
-                Program.playList.Insert(tmp);
+                MusicInfo tmp = new MusicInfo((MusicInfo)e.Node.Tag);
+                Program.playList.Add(tmp);
                 RefreshListView(PlayListView, Program.playList);
             }
             MusicListTreeView.SelectedNode = null;
@@ -87,241 +228,35 @@ namespace GarbageMusicPlayer
                 treeNode.Nodes.Add(tmp);
                 AddTreeViewToMusicList(treeNode.Nodes[treeNode.Nodes.Count - 1], list);
             }
-            foreach (MusicItem item in musicTree.GetMusicList())
+            foreach (MusicInfo item in musicTree.GetMusicList())
             {
                 TreeNode tmp = new TreeNode
                 {
                     Name = "file",
-                    Text = item.name,
+                    Text = item.title,
                     Tag = item
                 };
                 treeNode.Nodes.Add(tmp);
             }
         }
-
-        public void RefreshTreeView(TreeView treeView, TreeNode treeNode, MusicTree musicTree)
+        
+        public void DrawAlbumArt(MusicInfo info)
         {
-            if (musicTree == null)
-                return;
+            Background.SizeMode = PictureBoxSizeMode.CenterImage;
 
-            treeView.BeginUpdate();
-
-            treeNode.Nodes.Clear();
-            AddTreeViewToMusicList(treeNode, musicTree);
-
-            treeView.EndUpdate();
-        }
-
-        public void InitializeTreeView(TreeView treeView, MusicTree musicTree)
-        {
-            treeView.BeginUpdate();
-
-            if(musicTree != null)
+            Bitmap pictures = info.AlbumImage;
+            AlbumArtBox.Image = ImageController.ResizeBitmap(pictures, AlbumArtBox.Width, AlbumArtBox.Height, ImageController.ImageResizeMode.Bigger);
+            if(info.BlurredImage == null)
             {
-                TreeNode tmp = new TreeNode
-                {
-                    Name = "dir",
-                    Text = musicTree.dirName,
-                    Tag = musicTree.path
-                };
-
-                treeView.Nodes.Add(tmp);
+                Bitmap bitmap = ImageController.ResizeBitmap(pictures, Background.Width, Background.Height, ImageController.ImageResizeMode.Smaller);
+                bitmap = ImageController.CropBitmap(bitmap, Background.Width, Background.Height);
+                info.BlurredImage = ImageController.BoxBlur(bitmap, 2);
             }
-            treeView.EndUpdate();
-
-            RefreshTreeView(treeView, treeView.Nodes[0], musicTree);
-        }
-
-        public void RefreshListView(ListView listView, MusicCurrentList playList)
-        {
-            listView.BeginUpdate();
-            listView.Items.Clear();
-            int idx = 0;
-            foreach (MusicItem item in playList)
-            {
-                ListViewItem tmp = new ListViewItem
-                {
-                    Text = item.name,
-                    Tag = idx
-                };
-
-                listView.Items.Add(tmp);
-                idx++;
-            }
-            listView.EndUpdate();
-        }
-
-        public void InitializeListView(ListView listView, MusicCurrentList playList)
-        {
-            listView.BeginUpdate();
-
-            listView.View = View.Details;
             
-            listView.GridLines = true;
-            listView.FullRowSelect = true;
-            listView.CheckBoxes = false;
-
-            listView.Columns.Add("Name", 360);
-
-            listView.EndUpdate();
-
-            RefreshListView(listView, playList);
+            Background.Image = info.BlurredImage;
         }
 
-        public void InitializeVolumeBar(TrackBar trackBar, MusicPlayer musicPlayer)
-        {
-            trackBar.Minimum = 0;
-            trackBar.Maximum = 100;
-            trackBar.Value = 50;
-            musicPlayer.SetVolume(trackBar.Value / 100.0f);
-        }
-
-        public Bitmap ResizeBitmap(Bitmap bitmap, int width, int height, bool invers = false)
-        {
-            Size size;
-            if(!invers && ((bitmap.Width * height > bitmap.Height * width)) || (invers && (bitmap.Width * height < bitmap.Height * width)))
-            {
-                size = new Size(width, (int)(bitmap.Height * ((float)width / bitmap.Width)));
-            }
-            else if(!invers && ((bitmap.Width * height < bitmap.Height * width)) || (invers && (bitmap.Width * height > bitmap.Height * width)))
-            {
-                size = new Size((int)(bitmap.Width * ((float)height / bitmap.Height)), height);
-            }
-            else
-            {
-                size = new Size(width, height);
-            }
-            return new Bitmap(bitmap, size);
-        }
-
-        public Bitmap CropBitmap(Bitmap bitmap, int width, int height)
-        {
-            Rectangle cropArea = new Rectangle((bitmap.Width - width) / 2, (bitmap.Height - height) / 2, width, height);
-            Bitmap CroppedBitmap = new Bitmap(width, height);
-
-            using(Graphics g = Graphics.FromImage(CroppedBitmap))
-            {
-                g.DrawImage(bitmap, -cropArea.X, -cropArea.Y);
-                return CroppedBitmap;
-            }
-        }
-        private int Max(int a, int b)
-        {
-            if (a > b)
-                return a;
-            else
-                return b;
-        }
-
-        private int Min(int a, int b)
-        {
-            if (a < b)
-                return a;
-            else
-                return b;
-        }
-
-        private Bitmap BoxBlurH(Bitmap image)
-        {
-            Bitmap blurred = new Bitmap(image);
-            int r = 2;
-            int w = (r + r + 1);
-
-            for (int y = 0; y < blurred.Height; y++)
-            {
-                int R = 0;
-                int G = 0;
-                int B = 0;
-
-                for (int xx = -r; xx <= r; xx++)
-                {
-                    int ix = Min(blurred.Width - 1, Max(0, xx));
-                    Color pix = image.GetPixel(ix, y);
-
-                    R += pix.R;
-                    G += pix.G;
-                    B += pix.B;
-                }
-
-                for (int x = 1; x < blurred.Width; x++)
-                {
-                    int minx = Min(blurred.Width - 1, Max(0, x - r - 1));
-                    int maxx = Min(blurred.Width - 1, Max(0, x + r));
-
-                    Color d = image.GetPixel(minx, y);
-                    Color a = image.GetPixel(maxx, y);
-
-                    R = R - d.R + a.R;
-                    G = G - d.G + a.G;
-                    B = B - d.B + a.B;
-
-                    blurred.SetPixel(x, y, Color.FromArgb(R / w, G / w, B / w));
-                }
-            }
-
-            return blurred;
-        }
-
-        private Bitmap BoxBlurT(Bitmap image)
-        {
-            Bitmap blurred = new Bitmap(image);
-            int r = 2;
-            int w = (r + r + 1);
-
-            for (int x = 0; x < blurred.Width; x++)
-            {
-                int R = 0;
-                int G = 0;
-                int B = 0;
-
-                for (int yy = -r; yy <= r; yy++)
-                {
-                    int iy = Min(blurred.Width - 1, Max(0, yy));
-                    Color pix = image.GetPixel(x, iy);
-
-                    R += pix.R;
-                    G += pix.G;
-                    B += pix.B;
-                }
-
-                for (int y = 1; y < blurred.Height; y++)
-                {
-                    int miny = Min(blurred.Height - 1, Max(0, y - r - 1));
-                    int maxy = Min(blurred.Height - 1, Max(0, y + r));
-
-                    Color d = image.GetPixel(x, miny);
-                    Color a = image.GetPixel(x, maxy);
-
-                    R = R - d.R + a.R;
-                    G = G - d.G + a.G;
-                    B = B - d.B + a.B;
-
-                    blurred.SetPixel(x, y, Color.FromArgb(R / w, G / w, B / w));
-                }
-            }
-
-            return blurred;
-        }
-
-        public Bitmap Blur(Bitmap image)
-        {
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
-            Bitmap blurred = BoxBlurT(BoxBlurH(image));
-            //sw.Stop();
-            //MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
-            return blurred;
-        }
-
-        public void DrawAlbumArt(TagLib.IPicture pictures)
-        {
-            MemoryStream ms = new MemoryStream(pictures.Data.Data);
-            Bitmap bitmap = new Bitmap(Image.FromStream(ms));
-            AlbumArtBox.Image = ResizeBitmap(bitmap, AlbumArtBox.Width, AlbumArtBox.Height);
-            Background.Image = Blur(CropBitmap(ResizeBitmap(bitmap, Background.Width, Background.Height, true), Background.Width, Background.Height));
-        }
-
-        public void ChangeSelectedItem(MusicItem musicItem)
+        public void ChangeSelectedItem(MusicInfo musicItem)
         {
             musicTrackBar.Value = 0;
             MusicPlayTimeCheckTimer.Stop();
@@ -336,35 +271,42 @@ namespace GarbageMusicPlayer
                 return;
             }
 
-            if (musicItem.file.Tag.Title != null)
-                TitleTextBox.Text = musicItem.file.Tag.Title;
-            else
-                TitleTextBox.Text = (musicItem).name;
+            TitleTextBox.Text = musicItem.title;
 
-            if (musicItem.file.Tag.Pictures.Length != 0)
-                DrawAlbumArt(musicItem.file.Tag.Pictures[0]);
+            MusicComment.Text = musicItem.comment;
+
+            if (musicItem.AlbumImage != null)
+                DrawAlbumArt(musicItem);
             else
                 ResetAlbumArt();
         }
 
         public void ResetAlbumArt()
         {
-            Background.Image = new Bitmap(Properties.Resources.DefaultBackground1);
-            AlbumArtBox.Image = new Bitmap(Properties.Resources.noAlbumImage);
+            Background.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            if (DefaultBackgroundImage == null)
+                DefaultBackgroundImage = new Bitmap(Properties.Resources.DefaultBackground1);
+            if (DefaultAlbumImage == null)
+                DefaultAlbumImage = new Bitmap(Properties.Resources.noAlbumImage);
+
+            Background.Image = DefaultBackgroundImage;
+            AlbumArtBox.Image = DefaultAlbumImage;
         }
 
         private void MusicPauseStart()
         {
             if (Program.musicPlayer.IsNull())
             {
-                if (Program.playList.Current == null)
+                Program.playList.GetNext();
+                if (Program.playList.Current == -1)
                 {
                     MessageBox.Show("Music Not Selected");
                     return;
                 }
                 else
                 {
-                    ChangeSelectedItem(Program.playList.Current);
+                    ChangeSelectedItem(Program.playList.GetCurrent());
                 }
             }
 
@@ -425,7 +367,7 @@ namespace GarbageMusicPlayer
 
                 deleteItem.Click += (senders, es) =>
                 {
-                    Program.playList.Delete((int)tmp.Tag);
+                    Program.playList.RemoveAt((int)tmp.Tag);
                     RefreshListView(PlayListView, Program.playList);
                 };
 
@@ -469,13 +411,6 @@ namespace GarbageMusicPlayer
                     GetNextMusic();
                     break;
 
-                case Keys.E:
-                    if (isFormExtend)
-                        this.Width = Background.Width;
-                    else
-                        this.Width = 1076;
-                    isFormExtend = !isFormExtend;
-                    break;
             }
         }
 
@@ -487,6 +422,51 @@ namespace GarbageMusicPlayer
         private void MusicPlayStateChecker(object sender, EventArgs e)
         {
             musicTrackBar.Value = (int)(Program.musicPlayer.GetCurrentSecond() * 100 / Program.musicPlayer.GetTotalSecond());
+        }
+
+        private void ResizeComponant(Control componant, Size size, Point location)
+        {
+            componant.Size = size;
+            componant.Location = location;
+        }
+
+        private int WidthScale(int width)
+        {
+            return (int)(width * (float)this.Width / MainFormDefaultSize.Width);
+        }
+
+        private int HeightScale(int Height)
+        {
+            return (int)(Height * (float)this.Height / MainFormDefaultSize.Height);
+        }
+
+        private void MainFormSizeChanged(object sender, EventArgs e)
+        {
+            if (loadCompleted == false)
+                return;
+
+            foreach(ComponentDefaultSize c in ComponentList)
+            {
+                if(c.control == Background)
+                {
+                    ResizeComponant(
+                        c.control,
+                        new Size(WidthScale(c.size.Width), this.Height - 10),
+                        c.location
+                    );
+                }
+                else
+                {
+                    ResizeComponant(
+                        c.control,
+                        new Size(WidthScale(c.size.Width), HeightScale(c.size.Height)),
+                        new Point(WidthScale(c.location.X), HeightScale(c.location.Y))
+                    );
+                }
+            }
+
+            if (Program.playList != null && Program.playList.GetCurrent() != null)
+                DrawAlbumArt(Program.playList.GetCurrent());
         }
     }
 }

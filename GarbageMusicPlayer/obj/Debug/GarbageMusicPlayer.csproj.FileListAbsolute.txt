@@ -18,3 +18,4 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\Metro
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Fonts.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\GarbageMusicPlayerControlLibrary.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\GarbageMusicPlayerControlLibrary.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\System.Drawing.Common.dll
