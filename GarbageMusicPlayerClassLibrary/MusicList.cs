@@ -4,55 +4,61 @@ namespace GarbageMusicPlayerClassLibrary
 {
     public class MusicList : List<MusicInfo>
     {
-        public int Current { get; private set; }
+        private int current;
 
         public MusicList()
         {
-            Current = -1;
+            current = -1;
         }
 
-        public new void Add(MusicInfo item)
+        public int GetCurrent()
         {
-            base.Add(item);
+            if (base.Count == 0)
+                current = -1;
+
+            return current;
         }
 
-        public new void RemoveAt(int index)
+        public new MusicInfo this[int index]
         {
-            base.RemoveAt(index);
+            get
+            {
+                if (index < 0 || base.Count <= index)
+                    return null;
+
+                return base[index];
+            }
+        }
+        public MusicInfo GetCurrentItem()
+        {
+            return this[current];
         }
 
-        public new void Clear()
+        public void MovePrev()
         {
-            Current = -1;
-            base.Clear();
-        }
+            if (base.Count == 0) return;
 
-        public MusicInfo GetCurrent()
-        {
-            if (base.Count <= 0)
-                Current = -1;
-            if (Current < 0)
-                return null;
-            return base[Current];
-        }
-
-        public MusicInfo GetPrev()
-        {
-            if (Current <= 0)
-                Current = base.Count - 1;
+            if (current == 0)
+            {
+                current = base.Count - 1;
+            }
             else
-                Current--;
-            return GetCurrent();
+            {
+                current--;
+            }
         }
-
-        public MusicInfo GetNext()
+        public void MoveNext()
         {
-            if (Current >= base.Count - 1)
-                Current = 0;
-            else
-                Current++;
+            if (base.Count == 0) return;
 
-            return GetCurrent();
+            if (current == base.Count - 1)
+            {
+                current = 0;
+            }
+            else
+            {
+                current++;
+            }
         }
     }
 }

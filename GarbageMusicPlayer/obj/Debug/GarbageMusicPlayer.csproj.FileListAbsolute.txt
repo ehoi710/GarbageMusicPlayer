@@ -20,3 +20,4 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\Syste
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Design.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Debug\GarbageMusicPlayer.ListForm.resources

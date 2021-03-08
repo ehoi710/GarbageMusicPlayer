@@ -8,117 +8,114 @@ namespace GarbageMusicPlayerClassLibrary
     /// </summary>
     public class MusicPlayer
     {
-        private bool _isPlay;
-        private readonly IWavePlayer _wavePlayer;
-        private AudioFileReader _reader;
-        private TimeSpan _totalTime;
+        private readonly IWavePlayer wavePlayer;
+        private AudioFileReader reader;
+        private TimeSpan totalTime;
 
-        private static readonly MusicPlayer instance = null;
-        private MusicPlayer(EventHandler<StoppedEventArgs> func)
+        public double CurrentSecond
         {
-            this._isPlay = false;
-            this._wavePlayer = new WaveOutEvent();
-            this._wavePlayer.PlaybackStopped += func;
-            this._reader = null;
+            get {
+                if (IsNull()) return 0.0f;
+                return reader.CurrentTime.TotalSeconds;
+            }
+            set {
+                if (IsNull()) return;
+                reader.CurrentTime = TimeSpan.FromSeconds(value); 
+            }
         }
 
-        public static MusicPlayer GetInstance(EventHandler<StoppedEventArgs> func)
+        public double TotalSecond
         {
-            return instance ?? new MusicPlayer(func);
+            get {
+                if (IsNull()) return 0.0f;
+                return totalTime.TotalSeconds; 
+            }
+        }
+
+        public float Volume
+        {
+            get {
+                if (IsNull()) return 0.0f;
+                return wavePlayer.Volume; 
+            }
+            set {
+                if (IsNull()) return;
+                wavePlayer.Volume = value; 
+            }
+        }
+
+        public bool IsPlay { get; set; }
+        public double PausedTime { get; set; }
+
+        public MusicPlayer()
+        {
+            Reset();
+            wavePlayer = new WaveOutEvent();
+        }
+
+        public void SetStoppedEventHandler(EventHandler<StoppedEventArgs> stoppedEventArgs)
+        {
+            wavePlayer.PlaybackStopped += stoppedEventArgs;
         }
 
         public bool IsNull()
         {
-            return (_reader == null);
+            return (reader == null);
         }
 
-        public void SetReader(string mp3Path)
+        public void Reset()
         {
-            _reader = new AudioFileReader(mp3Path);
-            _wavePlayer.Init(_reader);
-            _totalTime = _reader.TotalTime;
+            IsPlay = false;
+            Volume = 0.2f;
+
+            reader = null;
         }
 
         public void SetReader(MusicInfo music)
         {
-            if(music == null)
-            {
-                _reader = null;
-                return;
-            }
-            _reader = new AudioFileReader(music.path);
-            _wavePlayer.Init(_reader);
-            _totalTime = _reader.TotalTime;
-        }
-
-        public void SetVolume(float volume)
-        {
-            _wavePlayer.Volume = volume;
-        }
-
-        public double GetTotalSecond()
-        {
-            return _totalTime.TotalSeconds;
-        }
-
-        public void SetCurrentSecond(double sec)
-        {
-            _reader.CurrentTime = TimeSpan.FromSeconds(sec);
-        }
-
-        public double GetCurrentSecond()
-        {
-            return _reader.CurrentTime.TotalSeconds;
+            reader = new AudioFileReader(music.path);
+            wavePlayer.Init(reader);
+            totalTime = reader.TotalTime;
         }
 
         public void Play()
         {
-            _isPlay = true;
-            _wavePlayer.Play();
+            if (IsNull()) return;
+
+            IsPlay = true;
+            wavePlayer.Play();
         }
 
         public void Play(TimeSpan time)
         {
-            _isPlay = true;
-            _wavePlayer.Play();
-            _reader.CurrentTime = time;
+            if (IsNull()) return;
+
+            IsPlay = true;
+            reader.CurrentTime = time;
+            wavePlayer.Play();
         }
 
         public TimeSpan Pause()
         {
-            _isPlay = false;
-            _wavePlayer.Pause();
-            return _reader.CurrentTime;
-        }
+            if (IsNull()) return TimeSpan.FromSeconds(0.0f);
 
-        public void PlayToggle()
-        {
-            if(IsPlay())
-            {
-                Pause();
-            }
-            else
-            {
-                Play();
-            }
+            IsPlay = false;
+            PausedTime = reader.CurrentTime.TotalSeconds;
+
+            wavePlayer.Pause();
+            return reader.CurrentTime;
         }
 
         public void Stop()
         {
-            _isPlay = false;
-            _wavePlayer.Stop();
-        }
-
-        public bool IsPlay()
-        {
-            return _isPlay;
+            wavePlayer.Stop();
+            Reset();
         }
 
         public bool IsEnd()
         {
-            if (_reader == null)
-                return true;
-            return (_reader.CurrentTime == _reader.TotalTime);
+            if (IsNull()) return true;
+            return (reader.CurrentTime == reader.TotalTime);
         }
     }
 }

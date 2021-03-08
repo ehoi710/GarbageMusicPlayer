@@ -1,490 +1,335 @@
 ﻿using GarbageMusicPlayerClassLibrary;
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace GarbageMusicPlayer
 {
-    public partial class MainForm : MetroFramework.Forms.MetroForm
+    public partial class MainForm : Form
     {
-        public struct ComponentDefaultSize
-        {
-            public Control control;
-            public Size size;
-            public Point location;
-
-            public ComponentDefaultSize(Control _control, Size _size, Point _location)
-            {
-                control = _control;
-                size = new Size(_size.Width, _size.Height);
-                location = new Point(_location.X, _location.Y);
-            }
-        }
-
-        bool loadCompleted = false;
-
-        MetroFramework.Drawing.Html.HtmlLabel TitleLabel;
-
         Bitmap DefaultBackgroundImage;
         Bitmap DefaultAlbumImage;
 
-        Size MainFormDefaultSize;
-        List<ComponentDefaultSize> ComponentList;
+        ListForm PlayListForm;
 
         public MainForm()
         {
             InitializeComponent();
 
-            TitleLabel = new MetroFramework.Drawing.Html.HtmlLabel();
-
-            InitializeComponentSize();
             InitializeMusicPlayer();
+            InitializePlayList();
 
-            Program.musicTree = new MusicTree(@"SOIM", Program.rootPath);
-            Program.musicTree.Refresh();
-            InitializeTreeView(MusicListTreeView, Program.musicTree);
+            InitializeMainForm();
+            InitializeAlbumArt();
+            InitializeMusicTrackBar();
+            InitializeTitleTextBox();
+            InitializePlayButton();
+            InitializeMusicComment();
+            InitializeListForm();
 
-            Program.playList = new MusicList();
-            InitializeListView(PlayListView, Program.playList);
-
-            InitializeVolumeBar(VolumeTrackBar, Program.musicPlayer);
-
-            if (Program.parameter != null)
-            {
-                string[] arr = Program.parameter.Split('\\');
-                Program.playList.Add(new MusicInfo(arr[arr.Length - 1], Program.parameter));
-                RefreshListView(PlayListView, Program.playList);
-            }
-
-            
-
-            KeyPreview = true;
-
-            ResetAlbumArt();
-
-            MusicPlayTimeCheckTimer.Stop();
-            musicTrackBar.Parent = Background;
-            TitleTextBox1.Parent = Background;
-            TitleTextBox1.Text = "TITLE";
-            TitleLabel.Parent = Background;
-            TitleLabel.BackgroundImage = ImageController.CropBitmap(
-                new Bitmap(Background.Image), 
-                TitleLabel.Location.X, TitleLabel.Location.Y, 
-                TitleLabel.Width, TitleLabel.Height
-            );
-            TitleLabel.Text = "<!doctype html><html><head><style>#d1 {text-align:center;} </style></head><body><div id = \"d1\">TITLE</div></body></html>";
-            AlbumArtBox.Parent = Background;
-            MusicComment.Parent = Background;
-
-            loadCompleted = true;
-        }
-
-        private void InitializeComponentSize()
-        {
-            this.Size = new Size(1200, 820);
-
-            Background.Location = new Point(0, 10);
-            Background.Size = new Size(450, 810);
-
-            AlbumArtBox.Location = new Point(45, 175);
-            AlbumArtBox.Size = new Size(360, 360);
-
-            musicTrackBar.Location = new Point(45, 545);
-            musicTrackBar.Size = new Size(360, 30);
-
-            TitleTextBox1.Location = new Point(45, 600);
-            TitleTextBox1.Size = new Size(360, 35);
-
-            TitleLabel.Location = new Point(45, 635);
-            TitleLabel.Size = new Size(360, 35);
-
-            PlayButton.Location = new Point(170, 675);
-            PlayButton.Size = new Size(120, 50);
-
-            VolumeTrackBar.Location = new Point(465, 30);
-            VolumeTrackBar.Size = new Size(180, 55);
-
-            MusicListTreeView.Location = new Point(465, 300);
-            MusicListTreeView.Size = new Size(360, 480);
-
-            PlayListView.Location = new Point(830, 300);
-            PlayListView.Size = new Size(360, 480);
-
-            MusicComment.Location = new Point(45, 75);
-            MusicComment.Size = new Size(360, 100);
-
-            MainFormDefaultSize = new Size(this.Width, this.Height);
-            ComponentList = new List<ComponentDefaultSize>();
-            foreach (Control c in this.Controls)
-            {
-                ComponentList.Add(new ComponentDefaultSize(c, c.Size, c.Location));
-            }
+            AcceptParameter();
         }
 
         private void InitializeMusicPlayer()
         {
-            Program.musicPlayer = MusicPlayer.GetInstance(MusicEndCheck);
+            //Initialize music player with stopped Event Handler MusicEndCheck
+            Program.musicPlayer = new MusicPlayer();
+            Program.musicPlayer.SetStoppedEventHandler(MusicEndCheck);
         }
-
-        public void InitializeTreeView(TreeView treeView, MusicTree musicTree)
+        private void InitializePlayList()
         {
-            treeView.BeginUpdate();
+            Program.playList = new MusicList();
+        }
+        private void InitializeMainForm()
+        {
+            this.Size = new Size(450, 820);
 
-            if (musicTree != null)
+            this.Text = "GMP";
+            MusicPlayTimeCheckTimer.Stop();
+
+            KeyPreview = true;
+        }
+        private void InitializeAlbumArt()
+        {
+            AlbumArtBox.Location = new Point(45, 155);
+            AlbumArtBox.Size = new Size(360, 360);
+
+            ResetAlbumArt();
+        }
+        private void InitializeMusicTrackBar()
+        {
+            musicTrackBar.Location = new Point(45, 525);
+            musicTrackBar.Size = new Size(360, 30);
+
+            ResetMusicTrackBar();
+        }
+        private void InitializeTitleTextBox()
+        {
+            TitleTextBox.Location = new Point(45, 580);
+            TitleTextBox.Size = new Size(360, 35);
+
+            TitleTextBox.Text = "TITLE";
+        }
+        private void InitializePlayButton()
+        {
+            PlayButton.Location = new Point(170, 655);
+            PlayButton.Size = new Size(120, 50);
+        }
+        private void InitializeMusicComment()
+        {
+            MusicComment.Location = new Point(45, 55);
+            MusicComment.Size = new Size(360, 100);
+        }
+        private void InitializeListForm()
+        {
+            PlayListForm = new ListForm
             {
-                TreeNode tmp = new TreeNode
-                {
-                    Name = "dir",
-                    Text = musicTree.dirName,
-                    Tag = musicTree.path
-                };
+                Location = new Point(Location.X + this.Width, this.Location.Y)
+            };
 
-                treeView.Nodes.Add(tmp);
-            }
-            treeView.EndUpdate();
+            PlayListForm.Show();
 
-            RefreshTreeView(treeView, treeView.Nodes[0], musicTree);
+            Program.playList = new MusicList();
         }
 
-        public void RefreshTreeView(TreeView treeView, TreeNode treeNode, MusicTree musicTree)
+        private void AcceptParameter()
         {
-            if (musicTree == null)
+            if (Program.isParam)
+            {
+                string[] arr = Program.parameter.Split('\\');
+                Program.playList.Add(new MusicInfo(arr[arr.Length - 1], Program.parameter));
+                PlayListForm.RefreshListView(Program.playList);
+            }
+        }
+
+        private void DrawAlbumArt(MusicInfo info)
+        {
+            Size albumSize = AlbumArtBox.Size;
+            Size backgroundSize = this.Size;
+
+            if (info == null || info.AlbumImage == null)
+            {
+                ResetAlbumArt();
                 return;
-
-            treeView.BeginUpdate();
-
-            treeNode.Nodes.Clear();
-            AddTreeViewToMusicList(treeNode, musicTree);
-
-            treeView.EndUpdate();
-        }
-
-        public void InitializeListView(ListView listView, MusicList playList)
-        {
-            listView.BeginUpdate();
-
-            listView.View = View.Details;
-
-            listView.GridLines = true;
-            listView.FullRowSelect = true;
-            listView.CheckBoxes = false;
-
-            listView.Columns.Add("Name", 360);
-
-            listView.EndUpdate();
-
-            RefreshListView(listView, playList);
-        }
-
-        public void RefreshListView(ListView listView, MusicList playList)
-        {
-            listView.BeginUpdate();
-            listView.Items.Clear();
-            int idx = 0;
-            foreach (MusicInfo item in playList)
-            {
-                ListViewItem tmp = new ListViewItem
-                {
-                    Text = item.title,
-                    Tag = idx
-                };
-
-                listView.Items.Add(tmp);
-                idx++;
             }
-            listView.EndUpdate();
-        }
 
-        public void InitializeVolumeBar(TrackBar trackBar, MusicPlayer musicPlayer)
-        {
-            trackBar.Minimum = 0;
-            trackBar.Maximum = 100;
-            trackBar.Value = 50;
-            musicPlayer.SetVolume(trackBar.Value / 100.0f);
-        }
-
-        private void MusicListTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            if (e.Node.Name.Equals("dir"))
-            {
-                MusicTree list = Program.musicTree.GetSubListByPath((String)e.Node.Tag);
-                if ((e.Node.Nodes.Count != 0) && (list.isLoaded))
-                {
-                    if (e.Node.IsExpanded) e.Node.Collapse();
-                    else e.Node.Expand();
-                }
-                else
-                {
-                    list.Refresh();
-                    RefreshTreeView(MusicListTreeView, e.Node, list);
-                    e.Node.Expand();
-                }
-            }
-            else
-            {
-                MusicInfo tmp = new MusicInfo((MusicInfo)e.Node.Tag);
-                Program.playList.Add(tmp);
-                RefreshListView(PlayListView, Program.playList);
-            }
-            MusicListTreeView.SelectedNode = null;
-        }
-
-        public void AddTreeViewToMusicList(TreeNode treeNode, MusicTree musicTree)
-        {
-            foreach (MusicTree list in musicTree.GetSubList())
-            {
-                TreeNode tmp = new TreeNode
-                {
-                    Name = "dir",
-                    Text = list.dirName,
-                    Tag = list.path
-                };
-
-                treeNode.Nodes.Add(tmp);
-                AddTreeViewToMusicList(treeNode.Nodes[treeNode.Nodes.Count - 1], list);
-            }
-            foreach (MusicInfo item in musicTree.GetMusicList())
-            {
-                TreeNode tmp = new TreeNode
-                {
-                    Name = "file",
-                    Text = item.title,
-                    Tag = item
-                };
-                treeNode.Nodes.Add(tmp);
-            }
-        }
-        
-        public void DrawAlbumArt(MusicInfo info)
-        {
-            Background.SizeMode = PictureBoxSizeMode.CenterImage;
+            this.BackgroundImageLayout = ImageLayout.Center;
 
             Bitmap pictures = info.AlbumImage;
-            AlbumArtBox.Image = ImageController.ResizeBitmap(pictures, AlbumArtBox.Width, AlbumArtBox.Height, ImageController.ImageResizeMode.Bigger);
-            if(info.BlurredImage == null)
-            {
-                Bitmap bitmap = ImageController.ResizeBitmap(pictures, Background.Width, Background.Height, ImageController.ImageResizeMode.Smaller);
-                bitmap = ImageController.CropBitmap(bitmap, Background.Width, Background.Height);
-                info.BlurredImage = ImageController.BoxBlur(bitmap, 2);
-            }
-            
-            Background.Image = info.BlurredImage; 
-            TitleLabel.BackgroundImage = ImageController.CropBitmap(new Bitmap(Background.Image), TitleLabel.Location.X, TitleLabel.Location.Y, TitleLabel.Width, TitleLabel.Height);
+            pictures = ImageController.ResizeBitmapFitSmaller(pictures, albumSize);
+
+            Bitmap blurred_pictures = info.BlurredImage;
+            blurred_pictures = ImageController.ResizeBitmapFitSmaller(blurred_pictures, backgroundSize);
+            blurred_pictures = ImageController.CropBitmap(blurred_pictures, backgroundSize);
+
+            blurred_pictures = ImageController.DecreseValue(blurred_pictures, this.TitleTextBox.Location, this.TitleTextBox.Size);
+
+            this.AlbumArtBox.Image = pictures;
+            this.BackgroundImage = blurred_pictures;
+        }
+        private void ResetAlbumArt()
+        {
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            SetDefaultBackgroundImage();
+            SetDefaultAlbumArtImage();
         }
 
-        public void ChangeSelectedItem(MusicInfo musicItem)
+        private void ResetMusicTrackBar()
         {
-            musicTrackBar.Value = 0;
-            MusicPlayTimeCheckTimer.Stop();
-            PlayButton.Text = "Play";
-
-            Program.musicPlayer.SetReader(musicItem);
-
-            if (musicItem == null)
+            int max;
+            if (Program.musicPlayer.IsNull())
             {
-                TitleTextBox1.Text = "Music not Selected";
-                ResetAlbumArt();
-                return;
+                max = 1;
             }
-
-            TitleTextBox1.Text = musicItem.title;
-
-            MusicComment.Text = musicItem.comment;
-
-            if (musicItem.AlbumImage != null)
-                DrawAlbumArt(musicItem);
             else
-                ResetAlbumArt();
+            {
+                max = (int)Program.musicPlayer.TotalSecond;
+            }
+            musicTrackBar.Max = max;
+            musicTrackBar.CurrentTickPosition = 0;
         }
 
-        public void ResetAlbumArt()
+        private void MusicStop()
         {
-            Background.SizeMode = PictureBoxSizeMode.StretchImage;
+            if (Program.musicPlayer.IsNull())
+                return;
 
+            Program.musicPlayer.Stop();
+            PlayButton.Text = "Play";
+            MusicPlayTimeCheckTimer.Stop();
+        }
+        private void MusicPause()
+        {
+            if (Program.musicPlayer.IsNull())
+                return;
+
+            Program.musicPlayer.Pause();
+            PlayButton.Text = "Play";
+            MusicPlayTimeCheckTimer.Stop();
+        }
+        private void MusicStart()
+        {
+            if (Program.musicPlayer.IsNull())
+                return;
+
+            Program.musicPlayer.Play();
+            PlayButton.Text = "Pause";
+            MusicPlayTimeCheckTimer.Start();
+        }
+
+        void SetDefaultBackgroundImage()
+        {
             if (DefaultBackgroundImage == null)
                 DefaultBackgroundImage = new Bitmap(Properties.Resources.DefaultBackground1);
+
+            this.BackgroundImage = DefaultBackgroundImage;
+        }
+        void SetDefaultAlbumArtImage()
+        {
             if (DefaultAlbumImage == null)
                 DefaultAlbumImage = new Bitmap(Properties.Resources.noAlbumImage);
 
-            Background.Image = DefaultBackgroundImage;
             AlbumArtBox.Image = DefaultAlbumImage;
-            TitleLabel.BackgroundImage = ImageController.CropBitmap(new Bitmap(Background.Image), TitleLabel.Location.X, TitleLabel.Location.Y, TitleLabel.Width, TitleLabel.Height);
         }
 
-        private void MusicPauseStart()
+        private void ChangeSelectedItem(MusicInfo musicItem)
         {
-            if (Program.musicPlayer.IsNull())
+            MusicStop();
+
+            if (musicItem == null)
             {
-                Program.playList.GetNext();
-                if (Program.playList.Current == -1)
-                {
-                    MessageBox.Show("Music Not Selected");
-                    return;
-                }
-                else
-                {
-                    ChangeSelectedItem(Program.playList.GetCurrent());
-                }
+                MessageBox.Show("Music Not Selected");
+
+                ResetAlbumArt();
+                return;
             }
 
-            if(Program.musicPlayer.IsPlay())
+            Program.musicPlayer.SetReader(musicItem);
+
+            TitleTextBox.Text = musicItem.title;
+            MusicComment.Text = musicItem.comment;
+
+            DrawAlbumArt(musicItem);
+
+            ResetMusicTrackBar();
+        }
+
+        private void SetPrevMusic()
+        {
+            MusicStop();
+            Program.playList.MovePrev();
+            ChangeSelectedItem(Program.playList.GetCurrentItem());
+        }
+        private void SetNextMusic()
+        {
+            MusicStop();
+            Program.playList.MoveNext();
+            ChangeSelectedItem(Program.playList.GetCurrentItem());
+        }
+
+        private void ToggleMusicPlayState()
+        {
+            if (Program.musicPlayer.IsPlay)
             {
-                Program.musicPlayer.Pause();
-                PlayButton.Text = "Play";
-                MusicPlayTimeCheckTimer.Stop();
+                MusicPause();
             }
             else
             {
-                Program.musicPlayer.Play();
-                PlayButton.Text = "Pause";
-                MusicPlayTimeCheckTimer.Start();
+                MusicStart();
             }
         }
-
-        private void GetNextMusic()
+        private void MusicPauseOrStartEvent()
         {
-            Program.musicPlayer.Stop();
-            ChangeSelectedItem(Program.playList.GetNext());
-        }
-
-        public void MusicEndCheck(object sender, EventArgs e)
-        {
-            if (Program.musicPlayer.IsEnd())
+            if (Program.musicPlayer.IsNull())
             {
-                GetNextMusic();
-                Program.musicPlayer.Play();
-                PlayButton.Text = "Stop";
+                SetNextMusic();
+                MusicStart();
+            }
+            else
+            {
+                ToggleMusicPlayState();
             }
         }
 
+        private void MoveMusicTimeAsSecond(double second)
+        {
+            musicTrackBar.CurrentTickPosition += (int)(musicTrackBar.Max / Program.musicPlayer.TotalSecond * second);
+            Program.musicPlayer.CurrentSecond = musicTrackBar.CurrentTickPosition;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Space:
+                    MusicPauseOrStartEvent();
+                    break;
+
+                case Keys.Left:
+                    MoveMusicTimeAsSecond(-5);
+                    break;
+
+                case Keys.Right:
+                    MoveMusicTimeAsSecond(5);
+                    break;
+
+                case Keys.A:
+                    SetPrevMusic();
+                    break;
+
+                case Keys.D:
+                    SetNextMusic();
+                    break;
+
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            MusicPauseStart();
+            MusicPauseOrStartEvent();
             PlayButton.Enabled = false;
             PlayButton.Enabled = true;
         }
 
+        private void MusicEndCheck(object sender, EventArgs e)
+        {
+            if (Program.musicPlayer.IsEnd())
+            {
+                SetNextMusic();
+                MusicStart();
+            }
+        }
         private void FomeClosing(object sender, FormClosingEventArgs e)
         {
             if (Program.musicPlayer != null)
                 Program.musicPlayer.Stop();
         }
-
-        private void PlayListMouseDown(object sender, MouseEventArgs e)
-        {
-            if(e.Button.Equals(MouseButtons.Right))
-            {
-                ListViewItem tmp = PlayListView.GetItemAt(e.X, e.Y);
-                ContextMenu PlayListContextMenu = new ContextMenu();
-
-                MenuItem deleteItem = new MenuItem
-                {
-                    Text = "Delete Item"
-                };
-
-                deleteItem.Click += (senders, es) =>
-                {
-                    Program.playList.RemoveAt((int)tmp.Tag);
-                    RefreshListView(PlayListView, Program.playList);
-                };
-
-                MenuItem ClearAll = new MenuItem
-                {
-                    Text = "Clear All"
-                };
-
-                ClearAll.Click += (senders, es) =>
-                {
-                    Program.playList.Clear();
-                    RefreshListView(PlayListView, Program.playList);
-                };
-
-                PlayListContextMenu.MenuItems.Add(deleteItem);
-                PlayListContextMenu.MenuItems.Add(ClearAll);
-
-                PlayListContextMenu.Show(PlayListView, new Point(e.X, e.Y));
-            }
-        }
-
-        private void VolumeBarScrolled(object sender, EventArgs e)
-        {
-            Program.musicPlayer.SetVolume(VolumeTrackBar.Value / 100.0f);
-        }
-
-        private void KeyboardDown(object sender, KeyEventArgs e)
-        {
-            switch(e.KeyCode)
-            {
-                case Keys.Space:
-                    MusicPauseStart();
-                    break;
-
-                case Keys.A:
-                    Program.musicPlayer.Stop();
-                    ChangeSelectedItem(Program.playList.GetPrev());
-                    break;
-
-                case Keys.D:
-                    GetNextMusic();
-                    break;
-
-            }
-        }
-
         private void MusicTrackBarScrolled(object sender, EventArgs e)
         {
-            Program.musicPlayer.SetCurrentSecond(musicTrackBar.Value * Program.musicPlayer.GetTotalSecond() / 100);
+            Program.musicPlayer.CurrentSecond = musicTrackBar.CurrentTickPosition;
         }
-
         private void MusicPlayStateChecker(object sender, EventArgs e)
         {
-            musicTrackBar.Value = (int)(Program.musicPlayer.GetCurrentSecond() * 100 / Program.musicPlayer.GetTotalSecond());
+            musicTrackBar.CurrentTickPosition = (int)Program.musicPlayer.CurrentSecond;
         }
 
-        private void ResizeComponant(Control componant, Size size, Point location)
+        protected override void WndProc(ref Message m)
         {
-            componant.Size = size;
-            componant.Location = location;
-        }
-
-        private int WidthScale(int width)
-        {
-            return (int)(width * (float)this.Width / MainFormDefaultSize.Width);
-        }
-
-        private int HeightScale(int Height)
-        {
-            return (int)(Height * (float)this.Height / MainFormDefaultSize.Height);
-        }
-
-        private void MainFormSizeChanged(object sender, EventArgs e)
-        {
-            if (loadCompleted == false)
-                return;
-
-            foreach(ComponentDefaultSize c in ComponentList)
+            switch(m.Msg)
             {
-                if(c.control == Background)
-                {
-                    ResizeComponant(
-                        c.control,
-                        new Size(WidthScale(c.size.Width), this.Height - 10),
-                        c.location
-                    );
-                }
-                else
-                {
-                    ResizeComponant(
-                        c.control,
-                        new Size(WidthScale(c.size.Width), HeightScale(c.size.Height)),
-                        new Point(WidthScale(c.location.X), HeightScale(c.location.Y))
-                    );
-                }
-            }
+                case Win32.WM_COPYDATA:
+                    Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(m.LParam, typeof(Win32.CopyDataStruct));
+                    string strData = Marshal.PtrToStringUni(st.lpData);
+                    Program.playList.Add(new MusicInfo(strData));
+                    PlayListForm.RefreshListView(Program.playList);
 
-            if (Program.playList != null && Program.playList.GetCurrent() != null)
-                DrawAlbumArt(Program.playList.GetCurrent());
+                    Win32.SetForegroundWindow(PlayListForm.Handle);
+                    break;
+                default:
+                    base.WndProc(ref m);
+                    break;
+            }
         }
     }
 }

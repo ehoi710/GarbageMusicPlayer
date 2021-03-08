@@ -1,27 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace GarbageMusicPlayerControlLibrary
 {
     public partial class MusicTrackBar: UserControl
     {
-        private int CurrentTickPosition = 0;
-        private int Min = 0;
-        private int Max = 100;
+        public int Min { get; set; }
+        public int Max { get; set; }
+
+        private int _CurrentTickPosition;
+        public int CurrentTickPosition
+        {
+            get
+            {
+                return _CurrentTickPosition;
+            }
+
+            set
+            {
+                if (Min <= value && value <= Max)
+                    _CurrentTickPosition = value;
+                else if (value < Min)
+                    _CurrentTickPosition = Min;
+                else if (Max < value)
+                    _CurrentTickPosition = Max;
+
+                this.Invalidate();
+            }
+        }
+
         private bool thumbClicked = false;
 
         private readonly Point leftEnd;
         private readonly Point rightEnd;
 
-        private Rectangle thumbRectangle = new Rectangle();
+        private Rectangle thumbRectangle;
 
         [Description("Current Change Event"), Category("")]
         public event EventHandler CurrentChangeEvent;
@@ -39,27 +54,13 @@ namespace GarbageMusicPlayerControlLibrary
             leftEnd = new Point(5, 10);
             rightEnd = new Point(this.Width - 5, 10);
 
-            thumbRectangle.Y = 5;
-            thumbRectangle.Width = 10;
-            thumbRectangle.Height = 10;
-        }
+            thumbRectangle = new Rectangle(
+                new Point(0, 5), 
+                new Size(10, 10)
+            );
 
-        public int Value
-        {
-            get
-            {
-                return CurrentTickPosition;
-            }
-            set
-            {
-                if (Min <= value && value <= Max)
-                    CurrentTickPosition = value;
-                else if (value < Min)
-                    CurrentTickPosition = Min;
-                else if (Max < value)
-                    CurrentTickPosition = Max;
-                this.Invalidate();
-            }
+            Min = 0;
+            Max = 1;
         }
 
         private int CurrentXCoordinate()
@@ -77,9 +78,13 @@ namespace GarbageMusicPlayerControlLibrary
 
             g.DrawLine(new Pen(Color.Black, 2.1f), leftEnd, rightEnd);
             g.DrawLine(new Pen(Color.White, 2), leftEnd, rightEnd);
-            g.FillEllipse(Brushes.White, thumbRectangle);
-        }
 
+            g.FillEllipse(Brushes.Black, thumbRectangle);
+            g.FillEllipse(Brushes.White, new RectangleF(
+                new PointF(thumbRectangle.X + 0.1f, thumbRectangle.Y + 0.1f),
+                new SizeF(thumbRectangle.Width - 0.2f, thumbRectangle.Height - 0.2f)
+                ));
+        }
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (thumbRectangle.Contains(e.Location))
@@ -98,12 +103,10 @@ namespace GarbageMusicPlayerControlLibrary
             Invoke(CurrentChangeEvent);
             this.Invalidate();
         }
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             thumbClicked = false;
         }
-
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if(thumbClicked)
