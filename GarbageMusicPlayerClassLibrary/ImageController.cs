@@ -13,6 +13,7 @@ namespace GarbageMusicPlayerClassLibrary
             return a < b ? a : b;
         }
 
+        // Bluring function
         private static Bitmap BoxBlurH(Bitmap image, int blurringRadius)
         {
             Bitmap blurredBitmap = new Bitmap(image);
@@ -97,6 +98,7 @@ namespace GarbageMusicPlayerClassLibrary
             return blurred;
         }
 
+        // Resize function
         public static Bitmap ResizeBitmap(Bitmap bitmap, float amount)
         {
             Size size = new Size((int)(bitmap.Width * amount), (int)(bitmap.Height * amount));
@@ -131,6 +133,7 @@ namespace GarbageMusicPlayerClassLibrary
             }
         }
 
+        // Crop function
         public static Bitmap CropBitmap(Bitmap bitmap, Size size)
         {
             Point location = new Point((bitmap.Width - size.Width) / 2, (bitmap.Height - size.Height) / 2);
@@ -155,6 +158,7 @@ namespace GarbageMusicPlayerClassLibrary
             }
         }
 
+        // Value decrese
         public static Bitmap DecreseValue(Bitmap bitmap, Point location, Size size)
         {
             Bitmap res = bitmap;

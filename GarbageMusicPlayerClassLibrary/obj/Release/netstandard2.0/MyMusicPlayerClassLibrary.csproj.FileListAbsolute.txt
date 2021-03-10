@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\MyMusicPlayerClassLibrary.deps.json
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\MyMusicPlayerClassLibrary.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\MyMusicPlayerClassLibrary.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Drawing.VisualStudio.15.0.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Windows.Forms.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Security.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Configuration.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\Accessibility.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Deployment.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Runtime.Serialization.Formatters.Soap.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.csprojAssemblyReference.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.AssemblyInfo.cs
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.csproj.CopyComplete
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\MyMusicPlayerClassLibrary.pdb

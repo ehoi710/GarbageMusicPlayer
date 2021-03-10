@@ -13,6 +13,7 @@ namespace GarbageMusicPlayer
 
         ListForm PlayListForm;
 
+        // Constructor
         public MainForm()
         {
             InitializeComponent();
@@ -31,6 +32,7 @@ namespace GarbageMusicPlayer
             AcceptParameter();
         }
 
+        // Initailizer
         private void InitializeMusicPlayer()
         {
             //Initialize music player with stopped Event Handler MusicEndCheck
@@ -43,6 +45,8 @@ namespace GarbageMusicPlayer
         }
         private void InitializeMainForm()
         {
+            this.AutoScaleMode = AutoScaleMode.None;
+
             this.Size = new Size(450, 820);
 
             this.Text = "GMP";
@@ -103,6 +107,7 @@ namespace GarbageMusicPlayer
             }
         }
 
+        // AlbumArt and Background Control
         private void DrawAlbumArt(MusicInfo info)
         {
             Size albumSize = AlbumArtBox.Size;
@@ -134,7 +139,22 @@ namespace GarbageMusicPlayer
             SetDefaultBackgroundImage();
             SetDefaultAlbumArtImage();
         }
+        private void SetDefaultBackgroundImage()
+        {
+            if (DefaultBackgroundImage == null)
+                DefaultBackgroundImage = new Bitmap(Properties.Resources.DefaultBackground1);
 
+            this.BackgroundImage = DefaultBackgroundImage;
+        }
+        private void SetDefaultAlbumArtImage()
+        {
+            if (DefaultAlbumImage == null)
+                DefaultAlbumImage = new Bitmap(Properties.Resources.noAlbumImage);
+
+            AlbumArtBox.Image = DefaultAlbumImage;
+        }
+
+        // MusicTrackBar Control
         private void ResetMusicTrackBar()
         {
             int max;
@@ -150,6 +170,7 @@ namespace GarbageMusicPlayer
             musicTrackBar.CurrentTickPosition = 0;
         }
 
+        // Music Control
         private void MusicStop()
         {
             if (Program.musicPlayer.IsNull())
@@ -176,21 +197,6 @@ namespace GarbageMusicPlayer
             Program.musicPlayer.Play();
             PlayButton.Text = "Pause";
             MusicPlayTimeCheckTimer.Start();
-        }
-
-        void SetDefaultBackgroundImage()
-        {
-            if (DefaultBackgroundImage == null)
-                DefaultBackgroundImage = new Bitmap(Properties.Resources.DefaultBackground1);
-
-            this.BackgroundImage = DefaultBackgroundImage;
-        }
-        void SetDefaultAlbumArtImage()
-        {
-            if (DefaultAlbumImage == null)
-                DefaultAlbumImage = new Bitmap(Properties.Resources.noAlbumImage);
-
-            AlbumArtBox.Image = DefaultAlbumImage;
         }
 
         private void ChangeSelectedItem(MusicInfo musicItem)
@@ -258,6 +264,36 @@ namespace GarbageMusicPlayer
             Program.musicPlayer.CurrentSecond = musicTrackBar.CurrentTickPosition;
         }
 
+        // Event Handler
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            MusicPauseOrStartEvent();
+            PlayButton.Enabled = false;
+            PlayButton.Enabled = true;
+        }
+        private void MusicEndCheck(object sender, EventArgs e)
+        {
+            if (Program.musicPlayer.IsEnd())
+            {
+                SetNextMusic();
+                MusicStart();
+            }
+        }
+        private void FomeClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Program.musicPlayer != null)
+                Program.musicPlayer.Stop();
+        }
+        private void MusicTrackBarScrolled(object sender, EventArgs e)
+        {
+            Program.musicPlayer.CurrentSecond = musicTrackBar.CurrentTickPosition;
+        }
+        private void MusicPlayStateChecker(object sender, EventArgs e)
+        {
+            musicTrackBar.CurrentTickPosition = (int)Program.musicPlayer.CurrentSecond;
+        }
+
+        // Keyboard Handler
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             switch (keyData)
@@ -285,35 +321,8 @@ namespace GarbageMusicPlayer
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
-        private void PlayButton_Click(object sender, EventArgs e)
-        {
-            MusicPauseOrStartEvent();
-            PlayButton.Enabled = false;
-            PlayButton.Enabled = true;
-        }
 
-        private void MusicEndCheck(object sender, EventArgs e)
-        {
-            if (Program.musicPlayer.IsEnd())
-            {
-                SetNextMusic();
-                MusicStart();
-            }
-        }
-        private void FomeClosing(object sender, FormClosingEventArgs e)
-        {
-            if (Program.musicPlayer != null)
-                Program.musicPlayer.Stop();
-        }
-        private void MusicTrackBarScrolled(object sender, EventArgs e)
-        {
-            Program.musicPlayer.CurrentSecond = musicTrackBar.CurrentTickPosition;
-        }
-        private void MusicPlayStateChecker(object sender, EventArgs e)
-        {
-            musicTrackBar.CurrentTickPosition = (int)Program.musicPlayer.CurrentSecond;
-        }
-
+        // Message reciver
         protected override void WndProc(ref Message m)
         {
             switch(m.Msg)

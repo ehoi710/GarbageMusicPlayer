@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarbageMusicPlayer", "Garba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarbageMusicPlayerClassLibrary", "GarbageMusicPlayerClassLibrary\GarbageMusicPlayerClassLibrary.csproj", "{A581DF6B-9BC9-4B83-B51B-AF87C65880CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGarbageMusicPlayer", "TestGarbageMusicPlayer\TestGarbageMusicPlayer.csproj", "{A9F108C6-7523-4094-99F7-CE54DC92917A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarbageMusicPlayerControlLibrary", "GarbageMusicPlayerControlLibrary\GarbageMusicPlayerControlLibrary.csproj", "{81388758-D516-4FDF-9096-CEC3F7C3E2A2}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{A581DF6B-9BC9-4B83-B51B-AF87C65880CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A581DF6B-9BC9-4B83-B51B-AF87C65880CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A581DF6B-9BC9-4B83-B51B-AF87C65880CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9F108C6-7523-4094-99F7-CE54DC92917A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9F108C6-7523-4094-99F7-CE54DC92917A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9F108C6-7523-4094-99F7-CE54DC92917A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9F108C6-7523-4094-99F7-CE54DC92917A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81388758-D516-4FDF-9096-CEC3F7C3E2A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81388758-D516-4FDF-9096-CEC3F7C3E2A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81388758-D516-4FDF-9096-CEC3F7C3E2A2}.Release|Any CPU.ActiveCfg = Release|Any CPU

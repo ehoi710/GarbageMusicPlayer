@@ -1,0 +1,12 @@
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\MyMusicPlayer.csprojAssemblyReference.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.ListForm.resources
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.MainForm.resources
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.Properties.Resources.resources
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\MyMusicPlayer.csproj.GenerateResource.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\MyMusicPlayer.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.exe
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\GarbageMusicPlayer.pdb
+C:\Program Files\GarbageMusicPlayer\GarbageMusicPlayer.exe.config
+C:\Program Files\GarbageMusicPlayer\GarbageMusicPlayer.exe
+C:\Program Files\GarbageMusicPlayer\GarbageMusicPlayer.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayer\obj\Release\MyMusicPlayer.csproj.CopyComplete

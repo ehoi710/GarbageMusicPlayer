@@ -6,6 +6,7 @@ namespace GarbageMusicPlayerClassLibrary
     {
         private int current;
 
+        // Constructor
         public MusicList()
         {
             current = -1;
@@ -34,6 +35,7 @@ namespace GarbageMusicPlayerClassLibrary
             return this[current];
         }
 
+        // Move
         public void MovePrev()
         {
             if (base.Count == 0) return;

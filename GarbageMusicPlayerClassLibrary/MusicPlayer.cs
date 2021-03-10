@@ -8,10 +8,6 @@ namespace GarbageMusicPlayerClassLibrary
     /// </summary>
     public class MusicPlayer
     {
-        private readonly IWavePlayer wavePlayer;
-        private AudioFileReader reader;
-        private TimeSpan totalTime;
-
         public double CurrentSecond
         {
             get {
@@ -23,7 +19,6 @@ namespace GarbageMusicPlayerClassLibrary
                 reader.CurrentTime = TimeSpan.FromSeconds(value); 
             }
         }
-
         public double TotalSecond
         {
             get {
@@ -31,7 +26,6 @@ namespace GarbageMusicPlayerClassLibrary
                 return totalTime.TotalSeconds; 
             }
         }
-
         public float Volume
         {
             get {
@@ -53,16 +47,6 @@ namespace GarbageMusicPlayerClassLibrary
             wavePlayer = new WaveOutEvent();
         }
 
-        public void SetStoppedEventHandler(EventHandler<StoppedEventArgs> stoppedEventArgs)
-        {
-            wavePlayer.PlaybackStopped += stoppedEventArgs;
-        }
-
-        public bool IsNull()
-        {
-            return (reader == null);
-        }
-
         public void Reset()
         {
             IsPlay = false;
@@ -71,6 +55,10 @@ namespace GarbageMusicPlayerClassLibrary
             reader = null;
         }
 
+        public void SetStoppedEventHandler(EventHandler<StoppedEventArgs> stoppedEventArgs)
+        {
+            wavePlayer.PlaybackStopped += stoppedEventArgs;
+        }
         public void SetReader(MusicInfo music)
         {
             reader = new AudioFileReader(music.path);
@@ -85,7 +73,6 @@ namespace GarbageMusicPlayerClassLibrary
             IsPlay = true;
             wavePlayer.Play();
         }
-
         public void Play(TimeSpan time)
         {
             if (IsNull()) return;
@@ -94,7 +81,6 @@ namespace GarbageMusicPlayerClassLibrary
             reader.CurrentTime = time;
             wavePlayer.Play();
         }
-
         public TimeSpan Pause()
         {
             if (IsNull()) return TimeSpan.FromSeconds(0.0f);
@@ -105,17 +91,24 @@ namespace GarbageMusicPlayerClassLibrary
             wavePlayer.Pause();
             return reader.CurrentTime;
         }
-
         public void Stop()
         {
             wavePlayer.Stop();
             Reset();
         }
 
+        public bool IsNull()
+        {
+            return (reader == null);
+        }
         public bool IsEnd()
         {
             if (IsNull()) return true;
             return (reader.CurrentTime == reader.TotalTime);
         }
+
+        private readonly IWavePlayer wavePlayer;
+        private AudioFileReader reader;
+        private TimeSpan totalTime;
     }
 }

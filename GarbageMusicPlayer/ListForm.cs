@@ -14,6 +14,8 @@ namespace GarbageMusicPlayer
             InitializeListForm();
             InitializePlayListView();
         }
+
+        // Initializer
         private void InitializeListForm()
         {
             this.Size = new Size(400, 820);
@@ -42,6 +44,7 @@ namespace GarbageMusicPlayer
             RefreshListView(Program.playList);
         }
 
+        // List view Control
         public void RefreshListView(MusicList playList)
         {
             ListView listView = PlayListView;
@@ -65,6 +68,7 @@ namespace GarbageMusicPlayer
             listView.EndUpdate();
         }
 
+        // Event Handler
         private void PlayListMouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button.Equals(MouseButtons.Right))

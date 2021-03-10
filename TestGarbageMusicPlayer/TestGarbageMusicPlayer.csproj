@@ -58,9 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GarbageMusicPlayerClassLibrary\GarbageMusicPlayerClassLibrary.csproj">
+    <ProjectReference Include="..\GarbageMusicPlayerClassLibrary\MyMusicPlayerClassLibrary.csproj">
       <Project>{a581df6b-9bc9-4b83-b51b-af87c65880ce}</Project>
-      <Name>GarbageMusicPlayerClassLibrary</Name>
+      <Name>MyMusicPlayerClassLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
