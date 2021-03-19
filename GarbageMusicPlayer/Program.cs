@@ -90,21 +90,10 @@ namespace GarbageMusicPlayer
         [STAThread]
         static void Main(string[] args)
         {
-            if (args.Length > 0)
+            GetArgs(args);
+            
+            if(IsAlreadyOn(Win32.FindWindow(null, "GMP")))
             {
-                isParam = true;
-                parameter = args[0];
-            }
-            IntPtr hWndOfPrevInstance = Win32.FindWindow(null, "GMP");
-
-            if(hWndOfPrevInstance != IntPtr.Zero)
-            {
-                if (Win32.IsIconic(hWndOfPrevInstance))
-                    Win32.ShowWindowAsync(hWndOfPrevInstance, Win32.SW_RESTORE);
-                Win32.SetForegroundWindow(hWndOfPrevInstance);
-
-                SendParams(hWndOfPrevInstance, ref parameter);
-
                 return;
             }
 
@@ -113,6 +102,28 @@ namespace GarbageMusicPlayer
             Application.Run(new MainForm());
         }
 
+        static void GetArgs(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                isParam = true;
+                parameter = args[0];
+            }
+        }
+        static bool IsAlreadyOn(IntPtr hWndOfPrevInstance)
+        {
+            if (hWndOfPrevInstance != IntPtr.Zero)
+            {
+                if (Win32.IsIconic(hWndOfPrevInstance))
+                    Win32.ShowWindowAsync(hWndOfPrevInstance, Win32.SW_RESTORE);
+                Win32.SetForegroundWindow(hWndOfPrevInstance);
+
+                SendParams(hWndOfPrevInstance, ref parameter);
+
+                return true;
+            }
+            return false;
+        }
         private static void SendParams(IntPtr hWndTarget, ref string param)
         {
             Win32.CopyDataStruct cds = new Win32.CopyDataStruct();

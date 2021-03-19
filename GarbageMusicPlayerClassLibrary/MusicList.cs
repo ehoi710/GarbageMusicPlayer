@@ -19,6 +19,19 @@ namespace GarbageMusicPlayerClassLibrary
 
             return current;
         }
+        public void SetCurrent(int idx)
+        {
+            if (base.Count == 0)
+                current = -1;
+            else {
+                if (idx > base.Count)
+                    current = base.Count - 1;
+                else if (idx < 0)
+                    current = 0;
+                else
+                    current = idx;
+            }
+        }
 
         public new MusicInfo this[int index]
         {
@@ -33,6 +46,14 @@ namespace GarbageMusicPlayerClassLibrary
         public MusicInfo GetCurrentItem()
         {
             return this[current];
+        }
+
+        // Override function
+        public new void RemoveAt(int idx)
+        {
+            MusicInfo delInfo = this[idx];
+            delInfo.Dispose();
+            base.RemoveAt(idx);
         }
 
         // Move

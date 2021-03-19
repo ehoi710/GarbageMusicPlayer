@@ -30,14 +30,6 @@ namespace GarbageMusicPlayerControlLibrary
             }
         }
 
-        private bool thumbClicked = false;
-
-        private Point leftEnd;
-        private Point rightEnd;
-
-        private Rectangle thumbRectangle;
-        public Point currentCoord;
-
         [Description("Current Change Event"), Category("")]
         public event EventHandler CurrentChangeEvent;
 
@@ -139,5 +131,13 @@ namespace GarbageMusicPlayerControlLibrary
             rightEnd = new Point(this.Width - 5, 10);
             base.OnSizeChanged(e);
         }
+
+        private bool thumbClicked = false;
+
+        private Point leftEnd;
+        private Point rightEnd;
+
+        private Rectangle thumbRectangle;
+        private Point currentCoord;
     }
 }

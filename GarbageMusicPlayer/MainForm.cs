@@ -91,6 +91,7 @@ namespace GarbageMusicPlayer
             {
                 Location = new Point(Location.X + this.Width, this.Location.Y)
             };
+            PlayListForm.ItemSelected += new EventHandler(ItemSelectedInMusicPlayList);
 
             PlayListForm.Show();
 
@@ -103,7 +104,7 @@ namespace GarbageMusicPlayer
             {
                 string[] arr = Program.parameter.Split('\\');
                 Program.playList.Add(new MusicInfo(arr[arr.Length - 1], Program.parameter));
-                PlayListForm.RefreshListView(Program.playList);
+                PlayListForm.RefreshListAndListView(Program.playList);
             }
         }
 
@@ -127,7 +128,6 @@ namespace GarbageMusicPlayer
             Bitmap blurred_pictures = info.BlurredImage;
             blurred_pictures = ImageController.ResizeBitmapFitSmaller(blurred_pictures, backgroundSize);
             blurred_pictures = ImageController.CropBitmap(blurred_pictures, backgroundSize);
-
             blurred_pictures = ImageController.DecreseValue(blurred_pictures, this.TitleTextBox.Location, this.TitleTextBox.Size);
 
             this.AlbumArtBox.Image = pictures;
@@ -224,13 +224,19 @@ namespace GarbageMusicPlayer
         private void SetPrevMusic()
         {
             MusicStop();
-            Program.playList.MovePrev();
+            PlayListForm.MovePrev();
             ChangeSelectedItem(Program.playList.GetCurrentItem());
         }
         private void SetNextMusic()
         {
             MusicStop();
-            Program.playList.MoveNext();
+            PlayListForm.MoveNext();
+            ChangeSelectedItem(Program.playList.GetCurrentItem());
+        }
+        private void SetSelectedMusic(int idx)
+        {
+            MusicStop();
+            PlayListForm.MoveSelected(idx);
             ChangeSelectedItem(Program.playList.GetCurrentItem());
         }
 
@@ -292,6 +298,10 @@ namespace GarbageMusicPlayer
         {
             musicTrackBar.CurrentTickPosition = (int)Program.musicPlayer.CurrentSecond;
         }
+        private void ItemSelectedInMusicPlayList(object sender, EventArgs e)
+        {
+            SetSelectedMusic(((ItemSelectedEventArgs)e).idx);
+        }
 
         // Keyboard Handler
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -331,7 +341,7 @@ namespace GarbageMusicPlayer
                     Win32.CopyDataStruct st = (Win32.CopyDataStruct)Marshal.PtrToStructure(m.LParam, typeof(Win32.CopyDataStruct));
                     string strData = Marshal.PtrToStringUni(st.lpData);
                     Program.playList.Add(new MusicInfo(strData));
-                    PlayListForm.RefreshListView(Program.playList);
+                    PlayListForm.RefreshListAndListView(Program.playList);
 
                     Win32.SetForegroundWindow(PlayListForm.Handle);
                     break;

@@ -5,8 +5,21 @@ using System.Windows.Forms;
 
 namespace GarbageMusicPlayer
 {
+    public class ItemSelectedEventArgs : EventArgs
+    {
+        public int idx;
+
+        public ItemSelectedEventArgs(int idx)
+        {
+            this.idx = idx;
+        }
+    }
+
     public partial class ListForm : Form
     {
+        // Event
+        public event EventHandler ItemSelected;
+
         public ListForm()
         {
             InitializeComponent();
@@ -41,11 +54,11 @@ namespace GarbageMusicPlayer
 
             PlayListView.EndUpdate();
 
-            RefreshListView(Program.playList);
+            RefreshListAndListView(Program.playList);
         }
 
         // List view Control
-        public void RefreshListView(MusicList playList)
+        public void RefreshListAndListView(MusicList playList)
         {
             ListView listView = PlayListView;
 
@@ -68,12 +81,33 @@ namespace GarbageMusicPlayer
             listView.EndUpdate();
         }
 
+        public void MovePrev()
+        {
+            Program.playList.MovePrev();
+        }
+        public void MoveNext()
+        {
+            Program.playList.MoveNext();
+        }
+        public void MoveSelected(int idx)
+        {
+            Program.playList.SetCurrent(idx);
+        }
+
         // Event Handler
         private void PlayListMouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button.Equals(MouseButtons.Right))
+            if (e.Button.Equals(MouseButtons.Left))
             {
-                ListViewItem tmp = PlayListView.GetItemAt(e.X, e.Y);
+                if (PlayListView.SelectedIndices.Count > 0 && ItemSelected != null)
+                {
+                    int idx = PlayListView.SelectedIndices[0];
+                    ItemSelected(this, new ItemSelectedEventArgs(idx));
+                }
+            }
+            else
+            {
+                ListViewItem selectedItem = PlayListView.GetItemAt(e.X, e.Y);
                 ContextMenu PlayListContextMenu = new ContextMenu();
 
                 MenuItem deleteItem = new MenuItem
@@ -83,11 +117,9 @@ namespace GarbageMusicPlayer
 
                 deleteItem.Click += (senders, es) =>
                 {
-                    int delIdx = (int)tmp.Tag;
-                    MusicInfo delInfo = Program.playList[delIdx];
-                    delInfo.Dispose();
+                    int delIdx = (int)selectedItem.Tag;
                     Program.playList.RemoveAt(delIdx);
-                    RefreshListView(Program.playList);
+                    RefreshListAndListView(Program.playList);
 
                     GC.Collect();
                 };
@@ -104,7 +136,7 @@ namespace GarbageMusicPlayer
                         mi.Dispose();
                     }
                     Program.playList.Clear();
-                    RefreshListView(Program.playList);
+                    RefreshListAndListView(Program.playList);
 
                     GC.Collect();
                 };
