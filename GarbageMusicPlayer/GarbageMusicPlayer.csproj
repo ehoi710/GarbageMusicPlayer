@@ -70,11 +70,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ListForm.cs">
+    <Compile Include="ControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListForm.Designer.cs">
-      <DependentUpon>ListForm.cs</DependentUpon>
+    <Compile Include="ControlForm.Designer.cs">
+      <DependentUpon>ControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -84,8 +84,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ListForm.resx">
-      <DependentUpon>ListForm.cs</DependentUpon>
+    <EmbeddedResource Include="ControlForm.resx">
+      <DependentUpon>ControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -6,3 +6,11 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\o
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.pdb
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.csprojAssemblyReference.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Debug\GarbageMusicPlayerClassLibrary.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Debug\GarbageMusicPlayerClassLibrary.pdb
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.csproj.CopyComplete
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Debug\NAudio.dll
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\bin\Debug\NAudio.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.AlbumArtControl.resources
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.ColorSelecter.resources
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerControlLibrary\obj\Debug\GarbageMusicPlayerControlLibrary.DatetimeUpDown.resources

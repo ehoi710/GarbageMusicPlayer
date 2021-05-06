@@ -8,39 +8,9 @@ namespace GarbageMusicPlayerClassLibrary
         public string path;
         public string title;
         public string comment;
+        public string lyrics;
 
-        public Bitmap AlbumImage
-        {
-            get
-            {
-                return _albumImage;
-            }
-            set
-            {
-                _albumImage = value;
-            }
-        }
-        public Bitmap BlurredImage
-        {
-            get
-            {
-                if(
-                    _blurredImage == null
-                )
-                {
-                    _blurredImage = ImageController.BoxBlur(AlbumImage, 2);
-                }
-
-                return _blurredImage;
-            }
-            private set
-            {
-                _blurredImage = value;
-            }
-        }
-
-        private Bitmap _albumImage;
-        private Bitmap _blurredImage;
+        public Bitmap AlbumImage { get; set; }
 
         // Contructor
         public MusicInfo()
@@ -49,7 +19,6 @@ namespace GarbageMusicPlayerClassLibrary
             this.path = null;
 
             this.AlbumImage = null;
-            this.BlurredImage = null;
 
             this.comment = null;
         }
@@ -60,6 +29,7 @@ namespace GarbageMusicPlayerClassLibrary
             InitializeTitle();
             InitializeComment();
             InitializeAlbumImage();
+            InitializeLyrics();
         }
         public MusicInfo(string name, string filepath)
         {
@@ -67,6 +37,7 @@ namespace GarbageMusicPlayerClassLibrary
             InitializeTitleWithDefaultName(name);
             InitializeComment();
             InitializeAlbumImage();
+            InitializeLyrics();
         }
         public MusicInfo(MusicInfo item)
         {
@@ -75,6 +46,7 @@ namespace GarbageMusicPlayerClassLibrary
             InitializeTitle();
             InitializeComment();
             InitializeAlbumImage();
+            InitializeLyrics();
         }
 
         private void InitializeTitle()
@@ -109,6 +81,7 @@ namespace GarbageMusicPlayerClassLibrary
             if (file.Tag.Comment != null)
             {
                 this.comment = file.Tag.Comment;
+                this.comment = this.comment.Replace("\\n", "\n");
             }
             else
             {
@@ -123,22 +96,25 @@ namespace GarbageMusicPlayerClassLibrary
                 this.AlbumImage = new Bitmap(Image.FromStream(new MemoryStream(file.Tag.Pictures[0].Data.Data)));
             }
         }
+        private void InitializeLyrics()
+        {
+            TagLib.File file = TagLib.File.Create(path);
+            if(file.Tag.Lyrics != null)
+            {
+                this.lyrics = file.Tag.Lyrics;
+            }
+        }
+        public void Dispose()
+        {
+            if (AlbumImage != null)
+            {
+                AlbumImage.Dispose();
+            }
+        }
 
         ~MusicInfo()
         {
             this.Dispose();
-        }
-
-        public void Dispose()
-        {
-            if(_albumImage != null)
-            {
-                _albumImage.Dispose();
-            }
-            if(_blurredImage != null)
-            {
-                _blurredImage.Dispose();
-            }
         }
     }
 }

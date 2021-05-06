@@ -8,6 +8,22 @@ namespace GarbageMusicPlayerClassLibrary
     /// </summary>
     public class MusicPlayer
     {
+        public bool IsPlay { get; set; }
+
+        public float Volume
+        {
+            get
+            {
+                if (IsNull()) return 0.0f;
+                return wavePlayer.Volume;
+            }
+            set
+            {
+                if (IsNull()) return;
+                wavePlayer.Volume = value;
+            }
+        }
+
         public double CurrentSecond
         {
             get {
@@ -26,25 +42,16 @@ namespace GarbageMusicPlayerClassLibrary
                 return totalTime.TotalSeconds; 
             }
         }
-        public float Volume
-        {
-            get {
-                if (IsNull()) return 0.0f;
-                return wavePlayer.Volume; 
-            }
-            set {
-                if (IsNull()) return;
-                wavePlayer.Volume = value; 
-            }
-        }
-
-        public bool IsPlay { get; set; }
         public double PausedTime { get; set; }
 
         public MusicPlayer()
         {
             Reset();
             wavePlayer = new WaveOutEvent();
+        }
+        ~MusicPlayer()
+        {
+            this.Dispose();
         }
 
         public void Reset()
@@ -61,6 +68,12 @@ namespace GarbageMusicPlayerClassLibrary
         }
         public void SetReader(MusicInfo music)
         {
+            if(music == null)
+            {
+                reader = null;
+                return;
+            }
+
             reader = new AudioFileReader(music.path);
             wavePlayer.Init(reader);
             totalTime = reader.TotalTime;
@@ -107,8 +120,16 @@ namespace GarbageMusicPlayerClassLibrary
             return (reader.CurrentTime == reader.TotalTime);
         }
 
+        public void Dispose()
+        {
+            this.reader.Dispose();
+            this.wavePlayer.Dispose();
+        }
+
         private readonly IWavePlayer wavePlayer;
+
         private AudioFileReader reader;
+
         private TimeSpan totalTime;
     }
 }

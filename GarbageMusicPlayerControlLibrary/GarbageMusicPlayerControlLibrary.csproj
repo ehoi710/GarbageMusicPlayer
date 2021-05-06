@@ -30,6 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GarbageMusicPlayerClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,19 +49,73 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlbumArtControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlbumArtControl.Designer.cs">
+      <DependentUpon>AlbumArtControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColorSelecter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorSelecter.Designer.cs">
+      <DependentUpon>ColorSelecter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatetimeUpDown.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DatetimeUpDown.Designer.cs">
+      <DependentUpon>DatetimeUpDown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormatTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormatTextBox.Designer.cs">
+      <DependentUpon>FormatTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LyricsViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LyricsViewer.Designer.cs">
+      <DependentUpon>LyricsViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MusicTrackBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MusicTrackBar.Designer.cs">
       <DependentUpon>MusicTrackBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="MusicTrackBarWithRange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MusicTrackBarWithRange.Designer.cs">
+      <DependentUpon>MusicTrackBarWithRange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AlbumArtControl.resx">
+      <DependentUpon>AlbumArtControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColorSelecter.resx">
+      <DependentUpon>ColorSelecter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatetimeUpDown.resx">
+      <DependentUpon>DatetimeUpDown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LyricsViewer.resx">
+      <DependentUpon>LyricsViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MusicTrackBar.resx">
       <DependentUpon>MusicTrackBar.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,8 +9,6 @@ namespace GarbageMusicPlayerControlLibrary
     {
         public int Min { get; set; }
         public int Max { get; set; }
-
-        private int _currentTickPosition;
         public int CurrentTickPosition
         {
             get
@@ -59,6 +57,10 @@ namespace GarbageMusicPlayerControlLibrary
             CurrentTickPosition = 0;
         }
 
+        private int CoordinateToCurrentPosition(int coord)
+        {
+            return (Max * (coord - leftEnd.X)) / (rightEnd.X - leftEnd.X);
+        }
         private int CurrentXCoordinate()
         {
             return leftEnd.X + (rightEnd.X - leftEnd.X) * CurrentTickPosition / Max;
@@ -67,20 +69,23 @@ namespace GarbageMusicPlayerControlLibrary
         // Event Handler
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Min - Max == 0)
+                Max++;
+
             currentCoord.X = CurrentXCoordinate();
             thumbRectangle.X = currentCoord.X - 5;
             thumbRectangle.Y = currentCoord.Y - 5;
 
-            Graphics g = e.Graphics;
+            Graphics graphics = e.Graphics;
 
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            g.DrawLine(new Pen(Color.Black, 2.1f), leftEnd, rightEnd);
-            g.DrawLine(new Pen(Color.Cyan, 2), leftEnd, currentCoord);
-            g.DrawLine(new Pen(Color.White, 2), currentCoord, rightEnd);
+            //graphics.DrawLine(new Pen(Color.Black, 1.6f), leftEnd, rightEnd);
+            graphics.DrawLine(new Pen(Color.Cyan, 1f), leftEnd, currentCoord);
+            graphics.DrawLine(new Pen(Color.White, 1f), currentCoord, rightEnd);
             
-            g.FillEllipse(Brushes.Black, thumbRectangle);
-            g.FillEllipse(
+            graphics.FillEllipse(Brushes.Black, thumbRectangle);
+            graphics.FillEllipse(
                 Brushes.White, 
                 new RectangleF(
                     new PointF(thumbRectangle.X + 0.1f, thumbRectangle.Y + 0.1f),
@@ -111,15 +116,14 @@ namespace GarbageMusicPlayerControlLibrary
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if(thumbClicked)
+            if (thumbClicked)
             {
-                if (CurrentTickPosition < Max && e.X > CurrentXCoordinate())
+                if (
+                    CurrentTickPosition < Max && e.X > CurrentXCoordinate() ||
+                    CurrentTickPosition > Min && e.X < CurrentXCoordinate()
+                )
                 {
-                    CurrentTickPosition++;
-                }
-                else if (CurrentTickPosition > 0 && e.X < CurrentXCoordinate())
-                {
-                    CurrentTickPosition--;
+                    CurrentTickPosition = CoordinateToCurrentPosition(e.X);
                 }
                 Invoke(CurrentChangeEvent);
                 this.Invalidate();
@@ -131,6 +135,8 @@ namespace GarbageMusicPlayerControlLibrary
             rightEnd = new Point(this.Width - 5, 10);
             base.OnSizeChanged(e);
         }
+
+        private int _currentTickPosition;
 
         private bool thumbClicked = false;
 

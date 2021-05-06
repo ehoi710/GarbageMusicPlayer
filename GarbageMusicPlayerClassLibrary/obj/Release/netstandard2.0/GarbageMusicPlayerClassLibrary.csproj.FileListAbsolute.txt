@@ -15,3 +15,9 @@ C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.pdb
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Drawing.VisualStudio.15.0.dll
 C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\obj\Release\netstandard2.0\GarbageMusicPlayerClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Windows.Forms.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Security.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Configuration.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\Accessibility.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Deployment.xml
+C:\Users\user\source\repos\GarbageMusicPlayer\GarbageMusicPlayerClassLibrary\bin\Release\netstandard2.0\System.Runtime.Serialization.Formatters.Soap.xml

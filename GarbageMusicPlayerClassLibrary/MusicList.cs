@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GarbageMusicPlayerClassLibrary
 {
     public class MusicList : List<MusicInfo>
     {
-        private int current;
-
         // Constructor
         public MusicList()
         {
@@ -61,7 +60,7 @@ namespace GarbageMusicPlayerClassLibrary
         {
             if (base.Count == 0) return;
 
-            if (current == 0)
+            if (current <= 0)
             {
                 current = base.Count - 1;
             }
@@ -74,7 +73,7 @@ namespace GarbageMusicPlayerClassLibrary
         {
             if (base.Count == 0) return;
 
-            if (current == base.Count - 1)
+            if (current >= base.Count - 1)
             {
                 current = 0;
             }
@@ -83,5 +82,12 @@ namespace GarbageMusicPlayerClassLibrary
                 current++;
             }
         }
+        public void MoveRandom()
+        {
+            Random rand = new Random();
+            SetCurrent(rand.Next(0, base.Count));
+        }
+
+        private int current;
     }
 }
